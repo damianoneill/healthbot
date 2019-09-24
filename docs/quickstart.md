@@ -33,7 +33,7 @@ This document describes the process for enabling [OpenConfig on a JUNOS Device](
 
 After logging into the cli, the Device must be configured for gRPC as follows:
 
-```
+```console
 [edit system services]
 user@host# set extension-service request-response grpc clear-text address 0.0.0.0
 ```
@@ -50,7 +50,7 @@ To register a Device within Healthbot, navigate to the Dashboard page and select
 
 This will open a pop-up window as below. At this point you need to provide the following information about your Device:
 
-```
+```console
 Device Name: R1
 Device Ip Address: 100.123.1.0
 Username: jcluser
@@ -67,6 +67,8 @@ At this point go ahead and select **Save and Deploy**. Assuming everything worke
 
 Note in the **Devices Card View** you can see a single entry for the Device you registered, in my case **Device R1**.
 
+> You should repeat this process for any additional Devices you want to monitor.
+
 ## Group
 
 When one or more Devices are available within Healthbot we can **group them using a classifier** that is relevant to our network. For e.g. we could defines groups for Customer Equipment or Provider Equipment, or we could group on region, ownership or any other criteria relevant to our organization.
@@ -79,7 +81,7 @@ To classify one or more Devices within Healthbot, navigate to the Dashboard page
 
 This will open a pop-up window as below. At this point you need to provide the following information about your Device Group:
 
-```
+```console
 Device Group Name: Customer-Equipment
 Devices: R1
 ```
@@ -104,7 +106,7 @@ To map KPIs against our Device Group we created in the previous stage, navigate 
 
 This will open a pop-up window as below. At this point you need to provide the following information about your Device Group:
 
-```
+```console
 Name of Playbook Instance: CE-System-Playbook
 Device Group: Customer-Equipment
 ```
@@ -122,3 +124,20 @@ Note the **caret** on the left that can be expanded to show additional informati
 ## Monitor
 
 Finally we confirm that the solution has been configured correctly by viewing the Device Group / Device Monitor screen and identifying any issues that require a resolution.
+
+To view the Health (based on our chosen KPIs) of the Device Group we defined previously, navigate to the Device Group Health page and select your Device Group from the drop-down at the top left of the page and the specific Device your interested in from the drop-down below the chosen Device Group.
+
+```console
+Device Group drop-down: Customer-Equipment
+Device drop-down: R1
+```
+
+![Device Group Health](assets/monitor/device-group-health.png)
+
+Note the two views that have been populated, the Tile View and the Table View.
+
+The Tile View uses **colored tiles**(Red, Yellow, Green Gray) to allow you to monitor and troubleshoot the health of a Device. In my case Green indicates that no problems have been detected.
+
+The Table View allows you to monitor and troubleshoot the health of a single Device based on HealthBot data provided in a **customizable table**. You can see from the screenshot that the chosen playbook includes information on System processes for e.g. CPU Utilization.
+
+Additional information is available in the [Device, Device Group and Network Group](https://www.juniper.net/documentation/en_US/healthbot/topics/task/healthbot-monitoring-health.html) section of the User Guide.
