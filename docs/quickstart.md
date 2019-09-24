@@ -3,21 +3,65 @@ id: quickstart
 title: Quickstart
 ---
 
-This document assumes you have installed Healthbot and have access to the Dashboard at [https://<your-server>/](https://<your-server>/).
+This guide assumes you have installed Healthbot and can access the Dashboard as below.
 
-This guide will walk you through the minimum amount required to get Healthbot managing one of your Devices.
+![Empty Dashboard](assets/empty-dashboard.png)
+
+This guide will walk you through the minimum amount required to get Healthbot monitoring one of your Devices.
 
 The process required to do this is as follows:
 
 ![Healthbot Quickstart](assets/quickstart.png)
 
+There are a number of steps required to go from a blank system to a monitoring Devices.
+
+- Provisioning the Device
+- Registering the Device within Healthbot
+- Grouping Devices based on a business classifer
+- Instanatiating a Playbooks against Device Groups
+- Monitoring the KPIs within your network and reacting based on Network incidents
+
+Each of these steps are defined below;
+
 ## Provision
 
 The initial task is to **configure your Device sensors** to generate Telemetry towards Healthbot. There are a number of ways that Healtbot can recieve Telemtry (Openconfig, JTI Native Sensor, NETCONF or SNMP) this guide will focus on Openconfig.
 
+This document describes the process for enabling [OpenConfig on a JUNOS Device](https://www.juniper.net/documentation/en_US/junos/topics/task/installation/openconfig-installing.html).
+
+> Implementing OpenConfig with gRPC for Junos Telemetry Interface requires that you download and install a package called Network Agent if your Juniper Networks device is running a version of Junos OS with Upgraded FreeBSD. For all other versions of Junos OS, the Network Agent functionality is embedded in the software. Versions of JUNOS prior to 18.3R1 may require the OpenConfig and Network Agent packages installed.
+
+After logging into the cli, the Device must be configured for gRPC as follows:
+
+```
+[edit system services]
+user@host# set extension-service request-response grpc clear-text address 0.0.0.0
+```
+
+Additional information can be found in the [configuring gRPC topic](https://www.juniper.net/documentation/en_US/junos/topics/task/configuration/grpc-junos-telemetry-interface-configuring.html).
+
 ## Register
 
 Once a Device is provisoned for Telemetry, we can incorporate that Device by **configuring its management ip and authentication details within Healthbot**.
+
+To register a Device within Healthbot, navigate to the Dashboard page and select **+ Device** button.
+
+![Add Device Button](assets/register/add-device-button.png)
+
+This will open a pop-up window as below. At this point you need to provide the following information about your Device:
+
+```
+Device Name: R1
+Device Ip Address: 100.123.1.0
+```
+
+Assuming your Device is a JUNOS Device, the remaining information can be left as default.
+
+![Add Device](assets/register/add-device.png)
+
+At this point go ahead and select **Save and Deploy**. Assuming everyting worked ok you should now see a screen as follows:
+
+![Registered Device](assets/register/registered-device.png)
 
 ## Group
 
