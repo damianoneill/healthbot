@@ -136,7 +136,7 @@ Device drop-down: R1
 
 Note the two views that have been populated, the Tile View and the Table View.
 
-The Tile View uses **colored tiles**(Red, Yellow, Green Gray) to allow you to monitor and troubleshoot the health of a Device. In my case Green indicates that no problems have been detected.
+The Tile View uses **colored tiles**(Red, Yellow, Green Gray) to allow you to monitor and troubleshoot the health of a Device. Green indicates that no problems have been detected.
 
 The Table View allows you to monitor and troubleshoot the health of a single Device based on HealthBot data provided in a **customizable table**. You can see from the screenshot that the chosen playbook includes information on System processes for e.g. CPU Utilization.
 
