@@ -65,7 +65,7 @@
 <li>Registering the Device within Healthbot</li>
 <li>Grouping Devices based on a business classifier</li>
 <li>Instantiating a Playbooks against Device Groups</li>
-<li>Monitoring the KPIs within your network and reacting based on Network Incidents</li>
+<li>Monitoring the KPIs within your network</li>
 </ol>
 <p>Each of these steps are defined below;</p>
 <h2><a class="anchor" aria-hidden="true" id="provision"></a><a href="#provision" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Provision</h2>
@@ -98,8 +98,8 @@ Password: *****
 <p>You should repeat this process for any additional Devices you want to monitor.</p>
 </blockquote>
 <h2><a class="anchor" aria-hidden="true" id="group"></a><a href="#group" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Group</h2>
-<p>When one or more Devices are available within Healthbot we can <strong>group them using a classifier</strong> that is relevant to our network. E.g. we could defines groups for Customer Equipment or Provider Equipment, or we could group on region, ownership or any other criteria relevant to our organization.</p>
-<p>Why do we want to group Devices? Within Healthbot, Playbooks are instantiated against Device Groupings (or Network Groupings).</p>
+<p>When one or more Devices are available within Healthbot we can <strong>group them using a classifier</strong> that is relevant to our network. E.g. we could defines groups for Customer Equipment or Provider Equipment, or we could group on Region, Ownership or any other criteria relevant to our organization.</p>
+<p>Why do we want to group Devices? Within Healthbot, Playbooks(discussed later) are instantiated against Device Groupings (or Network Groupings).</p>
 <p>To classify one or more Devices within Healthbot, navigate to the Dashboard page and select <strong>+ Group</strong> button.</p>
 <p><img src="/healthbot/docs/assets/group/add-group-button.png" alt="Add Group Button"></p>
 <p>This will open a pop-up window as below. At this point you need to provide the following information about your Device Group:</p>
@@ -108,11 +108,11 @@ Devices: R1
 </code></pre>
 <p>Assuming your Device is a JUNOS Device, the remaining information can be left as default.</p>
 <p><img src="/healthbot/docs/assets/group/add-group.png" alt="Add Group"></p>
-<p>At this point go ahead and select <strong>Save and Deploy</strong>. Assuming everything worked ok you should now see a screen as follows:</p>
+<p>At this point go ahead and select <strong>Save and Deploy</strong>. Assuming everything worked ok, you should now see a screen as follows:</p>
 <p><img src="/healthbot/docs/assets/group/grouped-device.png" alt="Grouped Device"></p>
 <p>Note in the <strong>Devices Group Card View</strong> you can see a single entry for the Group you defined, in my case <strong>Customer-Equipment</strong>.</p>
 <h2><a class="anchor" aria-hidden="true" id="instantiate"></a><a href="#instantiate" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Instantiate</h2>
-<p>Internally Healthbot uses concepts such as Topics, Rules and Playbooks to define and categorize Key Performance Indicators for different Networks or functions and hows the system should react in the event of an incident. In this stage we will map the KPIs that we are interested in, against the Device Grouping we created in the previous stage.</p>
+<p>Internally Healthbot uses concepts such as Topics, Rules and Playbooks to define and categorize Key Performance Indicators for Devices, Networks or functions as well as how the system should react in the event of an incident. In this stage we will map the KPIs that we are interested in, against the Device Grouping we created in the previous stage.</p>
 <p>To map KPIs against our Device Group we created in the previous stage, navigate to the Playbook page and find the <strong>System KPIs</strong> playbook and select the <strong>Apply</strong> button for this playbook.</p>
 <p><img src="/healthbot/docs/assets/instantiate/system-kpi-playbook-apply-button.png" alt="System KPI Playbook Apply Button"></p>
 <p>This will open a pop-up window as below. At this point you need to provide the following information about your Device Group:</p>
