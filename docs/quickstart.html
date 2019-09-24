@@ -75,8 +75,8 @@
 <p>Implementing OpenConfig with gRPC for JUNOS Telemetry Interface requires that you download and install a package called Network Agent if your Juniper Networks device is running a version of JUNOS OS with Upgraded FreeBSD. For all other versions of JUNOS OS, the Network Agent functionality is embedded in the software. Versions of JUNOS prior to 18.3R1 may require the OpenConfig and Network Agent packages installed.</p>
 </blockquote>
 <p>After logging into the cli, the Device must be configured for gRPC as follows:</p>
-<pre><code class="hljs">[<span class="hljs-builtin-name">edit</span><span class="hljs-built_in"> system </span>services]
-user@host# <span class="hljs-builtin-name">set</span> extension-service request-response grpc clear-text<span class="hljs-built_in"> address </span>0.0.0.0
+<pre><code class="hljs css language-console">[edit system services]
+<span class="hljs-meta">user@host#</span><span class="bash"> <span class="hljs-built_in">set</span> extension-service request-response grpc clear-text address 0.0.0.0</span>
 </code></pre>
 <p>Additional information can be found in the <a href="https://www.juniper.net/documentation/en_US/junos/topics/task/configuration/grpc-junos-telemetry-interface-configuring.html">configuring gRPC topic</a>.</p>
 <h2><a class="anchor" aria-hidden="true" id="register"></a><a href="#register" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Register</h2>
@@ -84,8 +84,8 @@ user@host# <span class="hljs-builtin-name">set</span> extension-service request-
 <p>To register a Device within Healthbot, navigate to the Dashboard page and select <strong>+ Device</strong> button.</p>
 <p><img src="/healthbot/docs/assets/register/add-device-button.png" alt="Add Device Button"></p>
 <p>This will open a pop-up window as below. At this point you need to provide the following information about your Device:</p>
-<pre><code class="hljs">Device Name: R1
-Device<span class="hljs-built_in"> Ip </span>Address: 100.123.1.0
+<pre><code class="hljs css language-console">Device Name: R1
+Device Ip Address: 100.123.1.0
 Username: jcluser
 Password: *****
 </code></pre>
@@ -94,13 +94,16 @@ Password: *****
 <p>At this point go ahead and select <strong>Save and Deploy</strong>. Assuming everything worked ok you should now see a screen as follows:</p>
 <p><img src="/healthbot/docs/assets/register/registered-device.png" alt="Registered Device"></p>
 <p>Note in the <strong>Devices Card View</strong> you can see a single entry for the Device you registered, in my case <strong>Device R1</strong>.</p>
+<blockquote>
+<p>You should repeat this process for any additional Devices you want to monitor.</p>
+</blockquote>
 <h2><a class="anchor" aria-hidden="true" id="group"></a><a href="#group" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Group</h2>
 <p>When one or more Devices are available within Healthbot we can <strong>group them using a classifier</strong> that is relevant to our network. For e.g. we could defines groups for Customer Equipment or Provider Equipment, or we could group on region, ownership or any other criteria relevant to our organization.</p>
 <p>Why do we want to group Devices? Within Healthbot, Playbooks are instantiated against Device Groupings (or Network Groupings).</p>
 <p>To classify one or more Devices within Healthbot, navigate to the Dashboard page and select <strong>+ Group</strong> button.</p>
 <p><img src="/healthbot/docs/assets/group/add-group-button.png" alt="Add Group Button"></p>
 <p>This will open a pop-up window as below. At this point you need to provide the following information about your Device Group:</p>
-<pre><code class="hljs">Device<span class="hljs-built_in"> Group </span>Name: Customer-Equipment
+<pre><code class="hljs css language-console">Device Group Name: Customer-Equipment
 Devices: R1
 </code></pre>
 <p>Assuming your Device is a JUNOS Device, the remaining information can be left as default.</p>
@@ -113,8 +116,8 @@ Devices: R1
 <p>To map KPIs against our Device Group we created in the previous stage, navigate to the Playbook page and find the <strong>System KPIs</strong> playbook and select the <strong>Apply</strong> button for this playbook.</p>
 <p><img src="/healthbot/docs/assets/instantiate/system-kpi-playbook-apply-button.png" alt="System KPI Playbook Apply Button"></p>
 <p>This will open a pop-up window as below. At this point you need to provide the following information about your Device Group:</p>
-<pre><code class="hljs"><span class="hljs-type">Name</span> <span class="hljs-keyword">of</span> Playbook Instance: CE-<span class="hljs-keyword">System</span>-Playbook
-Device <span class="hljs-keyword">Group</span>: Customer-Equipment
+<pre><code class="hljs css language-console">Name of Playbook Instance: CE-System-Playbook
+Device Group: Customer-Equipment
 </code></pre>
 <p>Assuming your Device is a JUNOS Device, the remaining information can be left as default.</p>
 <p><img src="/healthbot/docs/assets/instantiate/instantiate-playbook.png" alt="Instantiate Playbook"></p>
@@ -123,4 +126,13 @@ Device <span class="hljs-keyword">Group</span>: Customer-Equipment
 <p>Note the <strong>caret</strong> on the left that can be expanded to show additional information about the running playbook instance and the <strong>traffic light</strong> indicator on the right showing that the instance is executing as expected.</p>
 <h2><a class="anchor" aria-hidden="true" id="monitor"></a><a href="#monitor" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Monitor</h2>
 <p>Finally we confirm that the solution has been configured correctly by viewing the Device Group / Device Monitor screen and identifying any issues that require a resolution.</p>
+<p>To view the Health (based on our chosen KPIs) of the Device Group we defined previously, navigate to the Device Group Health page and select your Device Group from the drop-down at the top left of the page and the specific Device your interested in from the drop-down below the chosen Device Group.</p>
+<pre><code class="hljs css language-console">Device Group drop-down: Customer-Equipment
+Device drop-down: R1
+</code></pre>
+<p><img src="/healthbot/docs/assets/monitor/device-group-health.png" alt="Device Group Health"></p>
+<p>Note the two views that have been populated, the Tile View and the Table View.</p>
+<p>The Tile View uses <strong>colored tiles</strong>(Red, Yellow, Green Gray) to allow you to monitor and troubleshoot the health of a Device. In my case Green indicates that no problems have been detected.</p>
+<p>The Table View allows you to monitor and troubleshoot the health of a single Device based on HealthBot data provided in a <strong>customizable table</strong>. You can see from the screenshot that the chosen playbook includes information on System processes for e.g. CPU Utilization.</p>
+<p>Additional information is available in the <a href="https://www.juniper.net/documentation/en_US/healthbot/topics/task/healthbot-monitoring-health.html">Device, Device Group and Network Group</a> section of the User Guide.</p>
 </span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/healthbot/docs/intro"><span class="arrow-prev">← </span><span>Overview</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#provision">Provision</a></li><li><a href="#register">Register</a></li><li><a href="#group">Group</a></li><li><a href="#instantiate">Instantiate</a></li><li><a href="#monitor">Monitor</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/healthbot/" class="nav-home"><img src="/healthbot/img/favicon.ico" alt="Juniper HealthBot" width="66" height="58"/></a><div><h5>Docs</h5><a href="/healthbot/docs/en/quickstart.html">Quickstart</a></div></section><section class="copyright">Copyright © 2019 Damian ONeill</section></footer></div></body></html>
