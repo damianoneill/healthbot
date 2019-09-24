@@ -13,7 +13,7 @@ The process required to do this is as follows:
 
 ![Healthbot Quickstart](assets/quickstart.png)
 
-There are a number of steps required to go from a blank system to a monitoring Devices.
+There are several required to go from a blank system to a monitoring Devices.
 
 1. Provisioning the Device
 2. Registering the Device within Healthbot
@@ -25,7 +25,7 @@ Each of these steps are defined below;
 
 ## Provision
 
-The initial task is to **configure your Device sensors** to generate Telemetry towards Healthbot. There are a number of ways that Healthbot can receive Telemetry (OpenConfig, JTI Native Sensor, NETCONF or SNMP) this guide will focus on OpenConfig.
+The initial task is to **configure your Device sensors** to generate Telemetry towards Healthbot. There are several ways that Healthbot can receive Telemetry (OpenConfig, JTI Native Sensor, NETCONF or SNMP) this guide will focus on OpenConfig.
 
 This document describes the process for enabling [OpenConfig on a JUNOS Device](https://www.juniper.net/documentation/en_US/junos/topics/task/installation/openconfig-installing.html).
 
@@ -71,7 +71,7 @@ Note in the **Devices Card View** you can see a single entry for the Device you 
 
 ## Group
 
-When one or more Devices are available within Healthbot we can **group them using a classifier** that is relevant to our network. For e.g. we could defines groups for Customer Equipment or Provider Equipment, or we could group on region, ownership or any other criteria relevant to our organization.
+When one or more Devices are available within Healthbot we can **group them using a classifier** that is relevant to our network. E.g. we could defines groups for Customer Equipment or Provider Equipment, or we could group on region, ownership or any other criteria relevant to our organization.
 
 Why do we want to group Devices? Within Healthbot, Playbooks are instantiated against Device Groupings (or Network Groupings).
 
@@ -138,6 +138,6 @@ Note the two views that have been populated, the Tile View and the Table View.
 
 The Tile View uses **colored tiles**(Red, Yellow, Green Gray) to allow you to monitor and troubleshoot the health of a Device. Green indicates that no problems have been detected.
 
-The Table View allows you to monitor and troubleshoot the health of a single Device based on HealthBot data provided in a **customizable table**. You can see from the screenshot that the chosen playbook includes information on System processes for e.g. CPU Utilization.
+The Table View allows you to monitor and troubleshoot the health of a single Device based on HealthBot data provided in a **customizable table**. You can see from the screenshot that the chosen playbook includes information on System processes e.g. CPU Utilization.
 
 Additional information is available in the [Device, Device Group and Network Group](https://www.juniper.net/documentation/en_US/healthbot/topics/task/healthbot-monitoring-health.html) section of the User Guide.
