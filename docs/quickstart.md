@@ -15,11 +15,11 @@ The process required to do this is as follows:
 
 There are a number of steps required to go from a blank system to a monitoring Devices.
 
-- Provisioning the Device
-- Registering the Device within Healthbot
-- Grouping Devices based on a business classifer
-- Instanatiating a Playbooks against Device Groups
-- Monitoring the KPIs within your network and reacting based on Network incidents
+1. Provisioning the Device
+2. Registering the Device within Healthbot
+3. Grouping Devices based on a business classifer
+4. Instanatiating a Playbooks against Device Groups
+5. Monitoring the KPIs within your network and reacting based on Network incidents
 
 Each of these steps are defined below;
 
@@ -53,6 +53,8 @@ This will open a pop-up window as below. At this point you need to provide the f
 ```
 Device Name: R1
 Device Ip Address: 100.123.1.0
+Username: jcluser
+Password: *****
 ```
 
 Assuming your Device is a JUNOS Device, the remaining information can be left as default.
@@ -63,11 +65,32 @@ At this point go ahead and select **Save and Deploy**. Assuming everyting worked
 
 ![Registered Device](assets/register/registered-device.png)
 
+Note in the **Devices Card View** you can see a single entry for the Device you registered, in my case **Device R1**.
+
 ## Group
 
 When one or more Devices are available within Healthbot we can **group them using a classifier** that is relevant to our network. For e.g. we could defines groups for Customer Equipment or Provider Equipment, or we could group on region, ownership or any other criteria relevant to our organisation.
 
-Why do we want to group Devices? Within Healthbot Playbooks are instanitated against Device Groupings (or Network Groupings).
+Why do we want to group Devices? Within Healthbot, Playbooks are instanitated against Device Groupings (or Network Groupings).
+
+To classify one or more Devices within Healthbot, navigate to the Dashboard page and select **+ Group** button.
+
+![Add Group Button](assets/group/add-group-button.png)
+
+This will open a pop-up window as below. At this point you need to provide the following information about your Device Group:
+
+```
+Device Group Name: Customer-Equipment
+Devices: R1
+```
+
+Assuming your Device is a JUNOS Device, the remaining information can be left as default.
+
+![Add Group](assets/group/add-group.png)
+
+At this point go ahead and select **Save and Deploy**. Assuming everyting worked ok you should now see a screen as follows:
+
+![Grouped Device](assets/group/grouped-device.png)
 
 ## Instanitate
 
