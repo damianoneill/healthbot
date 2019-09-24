@@ -17,19 +17,19 @@ There are a number of steps required to go from a blank system to a monitoring D
 
 1. Provisioning the Device
 2. Registering the Device within Healthbot
-3. Grouping Devices based on a business classifer
-4. Instanatiating a Playbooks against Device Groups
-5. Monitoring the KPIs within your network and reacting based on Network incidents
+3. Grouping Devices based on a business classifier
+4. Instantiating a Playbooks against Device Groups
+5. Monitoring the KPIs within your network and reacting based on Network Incidents
 
 Each of these steps are defined below;
 
 ## Provision
 
-The initial task is to **configure your Device sensors** to generate Telemetry towards Healthbot. There are a number of ways that Healtbot can recieve Telemtry (Openconfig, JTI Native Sensor, NETCONF or SNMP) this guide will focus on Openconfig.
+The initial task is to **configure your Device sensors** to generate Telemetry towards Healthbot. There are a number of ways that Healthbot can receive Telemetry (OpenConfig, JTI Native Sensor, NETCONF or SNMP) this guide will focus on OpenConfig.
 
 This document describes the process for enabling [OpenConfig on a JUNOS Device](https://www.juniper.net/documentation/en_US/junos/topics/task/installation/openconfig-installing.html).
 
-> Implementing OpenConfig with gRPC for Junos Telemetry Interface requires that you download and install a package called Network Agent if your Juniper Networks device is running a version of Junos OS with Upgraded FreeBSD. For all other versions of Junos OS, the Network Agent functionality is embedded in the software. Versions of JUNOS prior to 18.3R1 may require the OpenConfig and Network Agent packages installed.
+> Implementing OpenConfig with gRPC for JUNOS Telemetry Interface requires that you download and install a package called Network Agent if your Juniper Networks device is running a version of JUNOS OS with Upgraded FreeBSD. For all other versions of JUNOS OS, the Network Agent functionality is embedded in the software. Versions of JUNOS prior to 18.3R1 may require the OpenConfig and Network Agent packages installed.
 
 After logging into the cli, the Device must be configured for gRPC as follows:
 
@@ -42,7 +42,7 @@ Additional information can be found in the [configuring gRPC topic](https://www.
 
 ## Register
 
-Once a Device is provisoned for Telemetry, we can incorporate that Device by **configuring its management ip and authentication details within Healthbot**.
+Once a Device is provisioned for Telemetry, we can incorporate that Device by **configuring its management ip and authentication details within Healthbot**.
 
 To register a Device within Healthbot, navigate to the Dashboard page and select **+ Device** button.
 
@@ -61,7 +61,7 @@ Assuming your Device is a JUNOS Device, the remaining information can be left as
 
 ![Add Device](assets/register/add-device.png)
 
-At this point go ahead and select **Save and Deploy**. Assuming everyting worked ok you should now see a screen as follows:
+At this point go ahead and select **Save and Deploy**. Assuming everything worked ok you should now see a screen as follows:
 
 ![Registered Device](assets/register/registered-device.png)
 
@@ -69,9 +69,9 @@ Note in the **Devices Card View** you can see a single entry for the Device you 
 
 ## Group
 
-When one or more Devices are available within Healthbot we can **group them using a classifier** that is relevant to our network. For e.g. we could defines groups for Customer Equipment or Provider Equipment, or we could group on region, ownership or any other criteria relevant to our organisation.
+When one or more Devices are available within Healthbot we can **group them using a classifier** that is relevant to our network. For e.g. we could defines groups for Customer Equipment or Provider Equipment, or we could group on region, ownership or any other criteria relevant to our organization.
 
-Why do we want to group Devices? Within Healthbot, Playbooks are instanitated against Device Groupings (or Network Groupings).
+Why do we want to group Devices? Within Healthbot, Playbooks are instantiated against Device Groupings (or Network Groupings).
 
 To classify one or more Devices within Healthbot, navigate to the Dashboard page and select **+ Group** button.
 
@@ -88,13 +88,36 @@ Assuming your Device is a JUNOS Device, the remaining information can be left as
 
 ![Add Group](assets/group/add-group.png)
 
-At this point go ahead and select **Save and Deploy**. Assuming everyting worked ok you should now see a screen as follows:
+At this point go ahead and select **Save and Deploy**. Assuming everything worked ok you should now see a screen as follows:
 
 ![Grouped Device](assets/group/grouped-device.png)
 
-## Instanitate
+Note in the **Devices Group Card View** you can see a single entry for the Group you defined, in my case **Customer-Equipment**.
 
-Interally Healthbot uses concepts such as Topics, Rules and Playbooks to define and categorise Key Performance Indicators for different Networks or functions and hows the system should react in the event of an incident. In this stage we will map the KPIs that we are interested in, against the Device Grouping we created in the previous stage.
+## Instantiate
+
+Internally Healthbot uses concepts such as Topics, Rules and Playbooks to define and categorize Key Performance Indicators for different Networks or functions and hows the system should react in the event of an incident. In this stage we will map the KPIs that we are interested in, against the Device Grouping we created in the previous stage.
+
+To map KPIs against our Device Group we created in the previous stage, navigate to the Playbook page and find the **System KPIs** playbook and select the **Apply** button for this playbook.
+
+![System KPI Playbook Apply Button](assets/instantiate/system-kpi-playbook-apply-button.png)
+
+This will open a pop-up window as below. At this point you need to provide the following information about your Device Group:
+
+```
+Name of Playbook Instance: CE-System-Playbook
+Device Group: Customer-Equipment
+```
+
+Assuming your Device is a JUNOS Device, the remaining information can be left as default.
+
+![Instantiate Playbook](assets/instantiate/instantiate-playbook.png)
+
+At this point go ahead and select **Run Instance**. Assuming everything worked ok you should now see a screen as follows:
+
+![Grouped Device](assets/instantiate/instantiated-playbook.png)
+
+Note the **caret** on the left that can be expanded to show additional information about the running playbook instance and the **traffic light** indicator on the right showing that the instance is executing as expected.
 
 ## Monitor
 
