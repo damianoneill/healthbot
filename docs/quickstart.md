@@ -19,7 +19,7 @@ There are several required to go from a blank system to a monitoring Devices.
 2. Registering the Device within Healthbot
 3. Grouping Devices based on a business classifier
 4. Instantiating a Playbooks against Device Groups
-5. Monitoring the KPIs within your network and reacting based on Network Incidents
+5. Monitoring the KPIs within your network
 
 Each of these steps are defined below;
 
@@ -71,9 +71,9 @@ Note in the **Devices Card View** you can see a single entry for the Device you 
 
 ## Group
 
-When one or more Devices are available within Healthbot we can **group them using a classifier** that is relevant to our network. E.g. we could defines groups for Customer Equipment or Provider Equipment, or we could group on region, ownership or any other criteria relevant to our organization.
+When one or more Devices are available within Healthbot we can **group them using a classifier** that is relevant to our network. E.g. we could defines groups for Customer Equipment or Provider Equipment, or we could group on Region, Ownership or any other criteria relevant to our organization.
 
-Why do we want to group Devices? Within Healthbot, Playbooks are instantiated against Device Groupings (or Network Groupings).
+Why do we want to group Devices? Within Healthbot, Playbooks(discussed later) are instantiated against Device Groupings (or Network Groupings).
 
 To classify one or more Devices within Healthbot, navigate to the Dashboard page and select **+ Group** button.
 
@@ -90,7 +90,7 @@ Assuming your Device is a JUNOS Device, the remaining information can be left as
 
 ![Add Group](assets/group/add-group.png)
 
-At this point go ahead and select **Save and Deploy**. Assuming everything worked ok you should now see a screen as follows:
+At this point go ahead and select **Save and Deploy**. Assuming everything worked ok, you should now see a screen as follows:
 
 ![Grouped Device](assets/group/grouped-device.png)
 
@@ -98,7 +98,7 @@ Note in the **Devices Group Card View** you can see a single entry for the Group
 
 ## Instantiate
 
-Internally Healthbot uses concepts such as Topics, Rules and Playbooks to define and categorize Key Performance Indicators for different Networks or functions and hows the system should react in the event of an incident. In this stage we will map the KPIs that we are interested in, against the Device Grouping we created in the previous stage.
+Internally Healthbot uses concepts such as Topics, Rules and Playbooks to define and categorize Key Performance Indicators for Devices, Networks or functions as well as how the system should react in the event of an incident. In this stage we will map the KPIs that we are interested in, against the Device Grouping we created in the previous stage.
 
 To map KPIs against our Device Group we created in the previous stage, navigate to the Playbook page and find the **System KPIs** playbook and select the **Apply** button for this playbook.
 
