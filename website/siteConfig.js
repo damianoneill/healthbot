@@ -40,6 +40,12 @@ const siteConfig = {
   //headerLinks: [],
   headerLinks: [{ doc: "intro", label: "Guides" }],
 
+  // algolia: {
+  //   apiKey: "my-api-key",
+  //   indexName: "my-index-name",
+  //   algoliaOptions: {} // Optional, if provided by Algolia
+  // },
+
   // If you have users set above, you add it here:
   users,
 

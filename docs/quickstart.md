@@ -7,25 +7,25 @@ This guide assumes you have installed Healthbot and can access the Dashboard as 
 
 ![Empty Dashboard](assets/empty-dashboard.png)
 
-This guide will walk you through the minimum amount required to get Healthbot monitoring one of your Devices.
+This guide will walk you through the minimum steps required to get Healthbot monitoring one of your [Devices](glossary#device).
 
 The process required to do this is as follows:
 
 ![Healthbot Quickstart](assets/quickstart.png)
 
-There are several required to go from a blank system to a monitoring Devices.
+As shown in the diagram, there are several steps required to go from a blank system to a monitoring Devices.
 
 1. Provisioning the Device
 2. Registering the Device within Healthbot
 3. Grouping Devices based on a business classifier
-4. Instantiating a Playbooks against Device Groups
+4. Instantiating a [Playbooks](glossary#playbook) against [Device Groups](glossary#device-group)
 5. Monitoring the KPIs within your network
 
 Each of these steps are defined below;
 
 ## Provision
 
-The initial task is to **configure your Device sensors** to generate Telemetry towards Healthbot. There are several ways that Healthbot can receive Telemetry (OpenConfig, JTI Native Sensor, NETCONF or SNMP) this guide will focus on OpenConfig.
+The initial task is to **configure your Device** to generate Telemetry towards Healthbot. There are several ways that Healthbot can receive Telemetry (OpenConfig, JTI Native Sensor, NETCONF or SNMP) this guide will focus on OpenConfig.
 
 This document describes the process for enabling [OpenConfig on a JUNOS Device](https://www.juniper.net/documentation/en_US/junos/topics/task/installation/openconfig-installing.html).
 
@@ -35,7 +35,7 @@ After logging into the cli, the Device must be configured for gRPC as follows:
 
 ```console
 [edit system services]
-user@host# set extension-service request-response grpc clear-text address 0.0.0.0
+user@host# set extension-service request-response grpc clear-text
 ```
 
 Additional information can be found in the [configuring gRPC topic](https://www.juniper.net/documentation/en_US/junos/topics/task/configuration/grpc-junos-telemetry-interface-configuring.html).
@@ -71,9 +71,9 @@ Note in the **Devices Card View** you can see a single entry for the Device you 
 
 ## Group
 
-When one or more Devices are available within Healthbot we can **group them using a classifier** that is relevant to our network. E.g. we could defines groups for Customer Equipment or Provider Equipment, or we could group on Region, Ownership or any other criteria relevant to our organization.
+When one or more Devices are available within Healthbot we can **group them using a classifier** that is relevant to our network. E.g. we could define groups for Customer Equipment or Provider Equipment, or we could group on Region, Ownership or any other criteria relevant to our organization.
 
-Why do we want to group Devices? Within Healthbot, Playbooks(discussed later) are instantiated against Device Groupings (or Network Groupings).
+Why do we want to group Devices? Within Healthbot, Playbooks(discussed later) are instantiated against Device Groups (or Network Groups).
 
 To classify one or more Devices within Healthbot, navigate to the Dashboard page and select **+ Group** button.
 
