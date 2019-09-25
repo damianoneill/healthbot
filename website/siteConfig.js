@@ -42,7 +42,10 @@ const siteConfig = {
 
   algolia: {
     apiKey: "2e913bb4f70eeb0a94d6bd656899a3c1",
-    indexName: "juniper_healthbot"
+    indexName: "juniper_healthbot",
+    algoliaOptions: {
+      facetFilters: ["version:2.0.2"]
+    }
   },
 
   // If you have users set above, you add it here:
