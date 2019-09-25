@@ -1,0 +1,9 @@
+{
+  "version-2.0.2-docs": {
+    "Guides": [
+      "version-2.0.2-intro",
+      "version-2.0.2-quickstart",
+      "version-2.0.2-glossary"
+    ]
+  }
+}
