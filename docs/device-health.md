@@ -11,7 +11,7 @@ The page is constructed into three panes; Timeline View (Time), Tile View (Summa
 
 ![Health Focus](assets/health-focus.png)
 
-The sections below in this guide describe in detail these panes and how they can be interrupted.
+The sections below describe these panes and how they can be interpreted.
 
 ## Timeline View
 
