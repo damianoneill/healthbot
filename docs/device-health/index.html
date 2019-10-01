@@ -1,0 +1,159 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Device Health · Juniper HealthBot</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="The Device Health page on the Dashboard provides a solution to detect and troubleshoot Device Level health problems. It is structured through **visual indicators** (traffic light colours) to quickly acknowledge whether an issue exists or not."/><meta name="docsearch:version" content="2.0.2"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Device Health · Juniper HealthBot"/><meta property="og:type" content="website"/><meta property="og:url" content="https://damianoneill.github.io/healthbot/"/><meta property="og:description" content="The Device Health page on the Dashboard provides a solution to detect and troubleshoot Device Level health problems. It is structured through **visual indicators** (traffic light colours) to quickly acknowledge whether an issue exists or not."/><meta property="og:image" content="https://damianoneill.github.io/healthbot/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://damianoneill.github.io/healthbot/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/healthbot/img/favicon.ico"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/healthbot/js/scrollSpy.js"></script><link rel="stylesheet" href="/healthbot/css/main.css"/><script src="/healthbot/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/healthbot/"><img class="logo" src="/healthbot/img/favicon.ico" alt="Juniper HealthBot"/><h2 class="headerTitleWithLogo">Juniper HealthBot</h2></a><a href="/healthbot/versions"><h3>2.0.2</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/healthbot/docs/intro" target="_self">Guides</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search" title="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Guides</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul class=""><li class="navListItem"><a class="navItem" href="/healthbot/docs/intro">Overview</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/quickstart">Quickstart</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/healthbot/docs/device-health">Device Health</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/glossary">Glossary</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Device Health</h1></header><article><div><span><p>The Device Health page on the Dashboard provides a solution to detect and troubleshoot Device Level health problems. It is structured through <strong>visual indicators</strong> (traffic light colours) to quickly acknowledge whether an issue exists or not.</p>
+<p><img src="/healthbot/docs/assets/device-health.png" alt="Device Health"></p>
+<p>The page is constructed into three panes; Timeline View (Time), Tile View (Summary) and Table View (Detail) panes. Each pane provides a window into each of the stages for Health resolution.</p>
+<p><img src="/healthbot/docs/assets/health-focus.png" alt="Health Focus"></p>
+<p>The sections below describe these panes and how they can be interpreted.</p>
+<h2><a class="anchor" aria-hidden="true" id="timeline-view"></a><a href="#timeline-view" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Timeline View</h2>
+<p>Healthbot aggregates network data, it can be used to predict failures or correlate historical events against network activity. To facilitate the historical component, this health page provides a timeline slider that enables the user to select a period for which network data has been collected.</p>
+<p>The timeline allows you to select your time period by scrolling left or right and then double-clicking in the pane to determine the start (and finish) window.</p>
+<p>The dash and line shown on the screenshot indicated either a minor (yellow) or major (red) trigger has occurred within this given time period, this allows the user through a visual indicator to narrow in on the time period of interest.</p>
+<p><img src="/healthbot/docs/assets/health/timeline-view.png" alt="Health Focus"></p>
+<p>The red box on the left hand side of the screenshot identifies a Key Performance Indicator (KPI). KPI's in Healthbot are created by defining triggers against data (sensor information).</p>
+<p>In this example the rule <strong>check-system-cpu-load-average</strong> in the topic <strong>system.cpu</strong> has a trigger (KPI) defined called <strong>cpu-utilization-15min</strong> that on a <strong>60 second</strong> frequency determines whether 15 minute CPU Utilization is normal or abnormal. You can see the KPI definition in the below screenshot.</p>
+<p><img src="/healthbot/docs/assets/health/kpi-definition.png" alt="Health KPI"></p>
+<p>For a full list of the KPI's available on your system you can make a <a href="https://curl.haxx.se/">curl</a> query against the REST API shipped with Healthbot and use <a href="https://stedolan.github.io/jq/">jq</a> to filter the response.</p>
+<pre><code class="hljs css language-sh">curl -s -X GET <span class="hljs-string">"https://&lt;server:port&gt;/api/v1/topics/"</span> -H <span class="hljs-string">"accept: application/json"</span> -H <span class="hljs-string">"Content-Type: application/json"</span> -u &lt;username:password&gt; --insecure | jq <span class="hljs-string">'.topic[].rule[].trigger[]? | {name: .["trigger-name"], description: .description}'</span>
+</code></pre>
+<p>Will return a list of json objects with the KPI name and a description of the KPI.</p>
+<pre><code class="hljs">{
+  <span class="hljs-string">"name"</span>: <span class="hljs-string">"re-memory-buffer-utilization"</span>,
+  <span class="hljs-string">"description"</span>: <span class="hljs-string">"Sets health based on increase in system memory buffer utilization"</span>
+}
+{
+  <span class="hljs-string">"name"</span>: <span class="hljs-string">"processes-cpu-utilization"</span>,
+  <span class="hljs-string">"description"</span>: <span class="hljs-string">"Sets health based on system processes cpu utilization"</span>
+}
+{
+  <span class="hljs-string">"name"</span>: <span class="hljs-string">"processes-memory-utilization"</span>,
+  <span class="hljs-string">"description"</span>: <span class="hljs-string">"Sets health based on system processes memory utilization"</span>
+}
+{
+  <span class="hljs-string">"name"</span>: <span class="hljs-string">"cpu-utilization-15min"</span>,
+  <span class="hljs-string">"description"</span>: <span class="hljs-string">"Sets health based on increase in RE CPU 15 minutes load average utilization"</span>
+}
+{
+  <span class="hljs-string">"name"</span>: <span class="hljs-string">"cpu-utilization-1min"</span>,
+  <span class="hljs-string">"description"</span>: <span class="hljs-string">"Sets health based on increase in RE CPU 1 minute load average utilization"</span>
+}
+
+...
+
+</code></pre>
+<p>Each instance of Healthbot includes full documentation of the available REST APIs, this can be viewed at <strong>https://&lt;server:port&gt;/api/v1/</strong></p>
+<p><img src="/healthbot/docs/assets/rest-apis.png" alt="REST APIs"></p>
+<h2><a class="anchor" aria-hidden="true" id="tile-view"></a><a href="#tile-view" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Tile View</h2>
+<p>The Tile View provides a Device Group led summary of the Health of a Device. As we know Playbooks are instantiated against Device Groups and KPIs are a component of the Rules within a Playbook. So the summary visualized in this pane groups visual indicators for KPIs by <a href="glossary#topic">Topic</a> and by Device Groups.</p>
+<ul>
+<li>Playbook -&gt; Rules -&gt; Triggers (KPIs)</li>
+<li>Device Group -&gt; Devices</li>
+<li>Playbook Instances -&gt; Device Groups</li>
+</ul>
+<p>For Devices that are defined in multiple Device Groups, each Device Group that a Device participates within will be visible as a collection in this view, with Device Groups scrolling vertically over this view.</p>
+<p><img src="/healthbot/docs/assets/health/tile-view.png" alt="Tile View"></p>
+<p>The Device Group name will be visible on the left side of this pane for each of the groupings. This can be confirmed again with an API call, note below the call is filtering based on the Device name, in this case &quot;R1&quot;.</p>
+<pre><code class="hljs css language-sh">curl -s -X GET <span class="hljs-string">"https://&lt;server:port&gt;/api/v1/device-groups/"</span> -H <span class="hljs-string">"accept: application/json"</span> -H <span class="hljs-string">"Content-Type: application/json"</span> -u &lt;username:password&gt; --insecure | jq <span class="hljs-string">'."device-group"[] | select(.devices | index("R1")) | ."device-group-name"'</span>
+</code></pre>
+<p>Which will return a list of Device Group names if Device &quot;R1&quot; is present within that Device Group.</p>
+<pre><code class="hljs"><span class="hljs-string">"My_Sandbox"</span>
+<span class="hljs-string">"Customer-Equipment"</span>
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="table-view"></a><a href="#table-view" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Table View</h2>
+<p>When a specific Tile in the Tile view is identified for further investigation, selecting this tile will result on a filter being applied to the Table view, the filter in question is applied to the Table view columns Topic and Keys. The Topic filter matches on the Topic name. The Keys filter is a composite of a number of different variables.</p>
+<p><img src="/healthbot/docs/assets/health/table-view.png" alt="Table View"></p>
+<p>In the example above the Key is constructed as follows;</p>
+<ul>
+<li>Playbook Instance Name</li>
+<li>Playbook Name</li>
+<li>Set of Key Fields configured in the rule for this Playbook</li>
+</ul>
+<p>Therefore for</p>
+<pre><code class="hljs">_instance_id: [<span class="hljs-string">"interface-kpi-sandbox"</span>], _playbook_name: <span class="hljs-keyword">interface</span>-kpis-playbook, <span class="hljs-keyword">interface</span>-name: pfe-<span class="hljs-number">0</span><span class="hljs-regexp">/0/</span><span class="hljs-number">0</span>
+</code></pre>
+<p>The Instance Name is interface-kpi-sandbox, the playbook name is interface-kpis-playbook and the key field in this playbooks rule is the interface name, in my case I selected the tile for pfe-0/0/0.</p>
+<p>As you can see from the screenshot the KPIs that match this filter (at this time) are shown.</p>
+<p>Again, as before this can be confirmed with an API call.</p>
+<pre><code class="hljs css language-sh">curl -s -X GET <span class="hljs-string">"https://&lt;server:port&gt;/api/v1/health-tree/R1/"</span> -H <span class="hljs-string">"accept: application/json"</span> -H <span class="hljs-string">"Content-Type: application/json"</span> -u &lt;username:password&gt; --insecure | jq <span class="hljs-string">'.children[].children[].children[].children[] | select (.color=="red") | select(.data | contains("pfe-0/0/0")) | .data'</span>
+</code></pre>
+<p>In this case, this will return the Major messages filtered for the pfe-0/0/0 interface.</p>
+<pre><code class="hljs"><span class="hljs-comment">"pfe-0/0/0 output traffic is above high threshold(8e+08 octets)"</span>
+<span class="hljs-comment">"Out errors are increasing continuously on pfe-0/0/0, Error count is:0"</span>
+<span class="hljs-comment">"pfe-0/0/0 input traffic is above high threshold(8e+08 octets)"</span>
+<span class="hljs-comment">"In errors are increasing continuously on pfe-0/0/0, Error count is:0"</span>
+</code></pre>
+<p>In this case the API is filtering based on a match in the message content, but a number of additional criteria are returned in this API call and could be used to further match on the content.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/healthbot/docs/quickstart"><span class="arrow-prev">← </span><span>Quickstart</span></a><a class="docs-next button" href="/healthbot/docs/glossary"><span>Glossary</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#timeline-view">Timeline View</a></li><li><a href="#tile-view">Tile View</a></li><li><a href="#table-view">Table View</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"></section><section class="copyright">Copyright © 2019 Damian ONeill</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+                document.addEventListener('keyup', function(e) {
+                  if (e.target !== document.body) {
+                    return;
+                  }
+                  // keyCode for '/' (slash)
+                  if (e.keyCode === 191) {
+                    const search = document.getElementById('search_input_react');
+                    search && search.focus();
+                  }
+                });
+              </script><script>
+              var search = docsearch({
+                
+                apiKey: '2e913bb4f70eeb0a94d6bd656899a3c1',
+                indexName: 'juniper_healthbot',
+                inputSelector: '#search_input_react',
+                algoliaOptions: {"facetFilters":["version:2.0.2"]}
+              });
+            </script></body></html>
