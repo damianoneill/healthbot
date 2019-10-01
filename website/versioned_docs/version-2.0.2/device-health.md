@@ -70,7 +70,7 @@ Each instance of Healthbot includes full documentation of the available REST API
 
 ## Tile View
 
-The Tile View provides a Device Group led summary of the Health of a Device. As we know Playbooks are instantiated against Device Groups and KPIs are a component of the Rules within a Playbook. So the summary visualized in this pane groups visual indicators for KPIs by topics and by Device Groups. Huh?
+The Tile View provides a Device Group led summary of the Health of a Device. As we know Playbooks are instantiated against Device Groups and KPIs are a component of the Rules within a Playbook. So the summary visualized in this pane groups visual indicators for KPIs by [Topic](glossary#topic) and by Device Groups.
 
 - Playbook -> Rules -> Triggers (KPIs)
 - Device Group -> Devices
@@ -130,4 +130,4 @@ In this case, this will return the Major messages filtered for the pfe-0/0/0 int
 "In errors are increasing continuously on pfe-0/0/0, Error count is:0"
 ```
 
-In this case the API is filtering based on a match in the message content, but a number of additional criteria is returned in this API call and could be used to further match on the content.
+In this case the API is filtering based on a match in the message content, but a number of additional criteria are returned in this API call and could be used to further match on the content.
