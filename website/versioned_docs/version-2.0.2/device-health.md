@@ -1,6 +1,7 @@
 ---
-id: device-health
+id: version-2.0.2-device-health
 title: Device Health
+original_id: device-health
 ---
 
 The Device Health page on the Dashboard provides a solution to detect and troubleshoot Device Level health problems. It is structured through **visual indicators** (traffic light colours) to quickly acknowledge whether an issue exists or not.
