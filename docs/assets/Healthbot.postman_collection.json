@@ -1,0 +1,220 @@
+{
+	"info": {
+		"_postman_id": "2c08a811-eca5-4ba1-99ae-e673bf912b0a",
+		"name": "Healthbot",
+		"description": "The collection contains API Requests that can be used against the API Gateway bundled with Healthbot.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Devices",
+			"item": [
+				{
+					"name": "Get All Devices",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://{{server-port}}/api/v1/devices/",
+							"protocol": "https",
+							"host": [
+								"{{server-port}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"devices",
+								""
+							]
+						},
+						"description": "Retrieve high level information about the Devices registered with this Healthbot Server"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Device Groups",
+			"item": [
+				{
+					"name": "Get All Device Groups",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://{{server-port}}/api/v1/device-groups/",
+							"protocol": "https",
+							"host": [
+								"{{server-port}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"device-groups",
+								""
+							]
+						},
+						"description": "Retrieve high level information about the Device Groups registered with this Healthbot Server"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Playbooks",
+			"item": [
+				{
+					"name": "Get All Playbooks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://{{server-port}}/api/v1/playbooks/",
+							"protocol": "https",
+							"host": [
+								"{{server-port}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"playbooks",
+								""
+							]
+						},
+						"description": "Retrieve high level information about the Playbooks registered with this Healthbot Server"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Topics",
+			"item": [
+				{
+					"name": "Get All Topics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://{{server-port}}/api/v1/topics/",
+							"protocol": "https",
+							"host": [
+								"{{server-port}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics",
+								""
+							]
+						},
+						"description": "Retrieve high level information about the Topics registered with this Healthbot Server"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "Juniper!1",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "jcluser",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "c508ba8c-c05e-4d1b-b468-3883443883e3",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "1efeaab3-1179-480f-b423-3b400f70132a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "c1fced53-a612-41ee-a560-59f78bf63dd4",
+			"key": "server-port",
+			"value": "localhost:8080",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
