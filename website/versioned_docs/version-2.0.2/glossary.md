@@ -8,7 +8,7 @@ This guide contains a glossary for the common terms used within the Healthbot do
 
 ## Device
 
-From Healthbot's perspective a Device is something that emits Telemetry using one of four mechanisms; OpenConfig, JTI Native, NETCONF and SNMP. Therefore in the context of networking a Device could be a Router, Switch, Bridge, Transponder, ROADM, ILA or any piece of Network Equipment, virtual or physical that emits using one of the aforementioned mechanisms. Healthbot is not limited to a Networking context, other context such as General Computing, IOT or any other context that generates sensor data could be considered a candidate for Healthbot.
+From Healthbot's perspective a Device is something that emits Telemetry using one of four mechanisms; OpenConfig, JTI Native, NETCONF and SNMP. Therefore, in the context of networking a Device could be a Router, Switch, Bridge, Transponder, ROADM, ILA or any piece of Network Equipment, virtual or physical that emits using one of the aforementioned mechanisms. Healthbot is not limited to a Networking context, other context such as General Computing, IOT or any other context that generates sensor data could be considered a candidate for Healthbot.
 
 ## Device Group
 

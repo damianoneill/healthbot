@@ -24,7 +24,7 @@ The dash and line shown on the screenshot indicated either a minor (yellow) or m
 
 ![Health Focus](assets/health/timeline-view.png)
 
-The red box on the left hand side of the screenshot identifies a Key Performance Indicator (KPI). KPI's in Healthbot are created by defining triggers against data (sensor information).
+The red box on the left-hand side of the screenshot identifies a Key Performance Indicator (KPI). KPI's in Healthbot are created by defining triggers against data (sensor information).
 
 In this example the rule **check-system-cpu-load-average** in the topic **system.cpu** has a trigger (KPI) defined called **cpu-utilization-15min** that on a **60 second** frequency determines whether 15 minute CPU Utilization is normal or abnormal. You can see the KPI definition in the below screenshot.
 
@@ -111,9 +111,9 @@ Therefore for
 _instance_id: ["interface-kpi-sandbox"], _playbook_name: interface-kpis-playbook, interface-name: pfe-0/0/0
 ```
 
-The Instance Name is interface-kpi-sandbox, the playbook name is interface-kpis-playbook and the key field in this playbooks rule is the interface name, in my case I selected the tile for pfe-0/0/0.
+The Instance Name is interface-kpi-sandbox, the Playbook name is interface-kpis-playbook and the key field in this Playbooks rule is the interface name, in my case I selected the tile for pfe-0/0/0.
 
-As you can see from the screenshot the KPIs that match this filter (at this time) are shown.
+As you can see, from the screenshot the KPIs that match this filter (at this time) are shown.
 
 Again, as before this can be confirmed with an API call.
 

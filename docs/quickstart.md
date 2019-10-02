@@ -31,7 +31,7 @@ This document describes the process for enabling [OpenConfig on a JUNOS Device](
 
 > Implementing OpenConfig with gRPC for JUNOS Telemetry Interface requires that you download and install a package called Network Agent if your Juniper Networks device is running a version of JUNOS OS with Upgraded FreeBSD. For all other versions of JUNOS OS, the Network Agent functionality is embedded in the software. Versions of JUNOS prior to 18.3R1 may require the OpenConfig and Network Agent packages installed.
 
-After logging into the cli, the Device must be configured for gRPC as follows:
+After logging into the CLI, the Device must be configured for gRPC as follows:
 
 ```console
 [edit system services]
@@ -123,7 +123,7 @@ Note the **caret** on the left that can be expanded to show additional informati
 
 ## Monitor
 
-Finally we confirm that the solution has been configured correctly by viewing the Device Group / Device Monitor screen and identifying any issues that require a resolution.
+Finally, we confirm that the solution has been configured correctly by viewing the Device Group / Device Monitor screen and identifying any issues that require a resolution.
 
 To view the Health (based on our chosen KPIs) of the Device Group we defined previously, navigate to the Device Group Health page and select your Device Group from the drop-down at the top left of the page and the specific Device your interested in from the drop-down below the chosen Device Group.
 
@@ -138,6 +138,6 @@ Note the two views that have been populated, the Tile View and the Table View.
 
 The Tile View uses **colored tiles**(Red, Yellow, Green Gray) to allow you to monitor and troubleshoot the health of a Device. Green indicates that no problems have been detected.
 
-The Table View allows you to monitor and troubleshoot the health of a single Device based on HealthBot data provided in a **customizable table**. You can see from the screenshot that the chosen playbook includes information on System processes e.g. CPU Utilization.
+The Table View allows you to monitor and troubleshoot the health of a single Device based on HealthBot data provided in a **customizable table**. You can see from the screenshot that the chosen Playbook includes information on System processes e.g. CPU Utilization.
 
 Additional information is available in the [Device, Device Group and Network Group](https://www.juniper.net/documentation/en_US/healthbot/topics/task/healthbot-monitoring-health.html) section of the User Guide.
