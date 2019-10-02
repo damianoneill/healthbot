@@ -21,10 +21,14 @@ Operational intelligence (OI) is a category of real-time dynamic, business analy
 
 Playbooks are the key abstractions within Healthbot, they provide a language for describing Key Performance Indicators(KPIs), through applying rules against sensor data. The rules can describe in(valid) thresholds or conditions and what actions should be triggered in the event of a threshold crossing or a condition being met.
 
+## Rule
+
+An instance of the Healthbot Telemetry DSL, where a definition is created for a KPI and how it should react by defining what Telemetry is involved, how it should be filtered / manipulated and what if any reaction from Healthbot should occur.
+
 ## Telemetry
 
 Telemetry is the collection of measurements or other data at remote or inaccessible points and their automatic transmission to receiving equipment for monitoring. In Healthbot telemetry is used to gather data on the use and performance of hardware, protocols, applications, application components and processes e.g. measurements of start-up time and processing time, hardware, application crashes, and general usage statistics and/or user behavior.
 
 ## Topic
 
-Rules within Healthbot are organized by Topics. Topics provide a classification for a set of rules for e.g. rules relating to chassis sensors would be categorized under the chassis topic. Further sub classification can occur by post-pending a period to a high level Topic for e.g. chassis.temperature would contain rules pertaining to Chassis Temperature Sensors. After Rules are classified, Topic names can be used as visual clues in dashboard widgets to group indicators together. For e.g. on the Device Health screen, CPU health can be grouped with a collection of icons, labelled using the Topic name system.cpu.
+Rules within Healthbot are organized by Topics. Topics provide a classification for a set of rules for e.g. rules relating to chassis sensors would be categorized under the chassis topic. Further sub classification can occur by post-pending a period to a high level Topic for e.g. chassis.temperature would contain rules pertaining to Chassis Temperature Sensors. After Rules are classified, Topic names can be used as visual clues in dashboard widgets to group indicators together. For e.g. on the Device Health screen, CPU health can be grouped with a collection of icons, labeled using the Topic name system.cpu.
