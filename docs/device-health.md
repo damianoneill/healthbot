@@ -3,11 +3,11 @@ id: device-health
 title: Device Health
 ---
 
-The Device Health page on the Dashboard provides a solution to detect and troubleshoot Device Level health problems. It is structured through **visual indicators** (traffic light colours) to quickly acknowledge whether an issue exists or not.
+The Device Health page provides a solution to detect and troubleshoot Device Level health problems. It provides **visual indicators** (traffic-light colours) to see whether an issue exists or not.
 
 ![Device Health](assets/device-health.png)
 
-The page is constructed into three panes; Timeline View (Time), Tile View (Summary) and Table View (Detail) panes. Each pane provides a window into each of the stages for Health resolution.
+The page has three panes; Timeline View (Time), Tile View (Summary) and Table View (Detail) panes. Each pane provides a window into each of the stages for Health resolution.
 
 ![Health Focus](assets/health-focus.png)
 
@@ -23,13 +23,13 @@ The dash and line shown on the screenshot indicated either a minor (yellow) or m
 
 ![Health Focus](assets/health/timeline-view.png)
 
-The red box on the left-hand side of the screenshot identifies a Key Performance Indicator (KPI). KPI's in Healthbot are created by defining triggers against data (sensor information).
+The red box on the left-hand side of the screenshot identifies a Key Performance Indicator (KPI). KPIs in Healthbot are created by defining triggers against data (sensor information).
 
 In this example the rule **check-system-cpu-load-average** in the topic **system.cpu** has a trigger (KPI) defined called **cpu-utilization-15min** that on a **60 second** frequency determines whether 15 minute CPU Utilization is normal or abnormal. You can see the KPI definition in the below screenshot.
 
 ![Health KPI](assets/health/kpi-definition.png)
 
-For a full list of the KPI's available on your system you can make a [curl](https://curl.haxx.se/) query against the REST API shipped with Healthbot and use [jq](https://stedolan.github.io/jq/) to filter the response.
+For a full list of the KPIs available on your system you can make a [curl](https://curl.haxx.se/) query against the REST API shipped with Healthbot and use [jq](https://stedolan.github.io/jq/) to filter the response.
 
 ```sh
 curl -s -X GET "https://<server:port>/api/v1/topics/" -H "accept: application/json" -H "Content-Type: application/json" -u <username:password> --insecure | jq '.topic[].rule[].trigger[]? | {name: .["trigger-name"], description: .description}'
@@ -94,7 +94,7 @@ Which will return a list of Device Group names if Device "R1" is present within 
 
 ## Table View
 
-When a specific Tile in the Tile view is identified for further investigation, selecting this tile will result on a filter being applied to the Table view, the filter in question is applied to the Table view columns Topic and Keys. The Topic filter matches on the Topic name. The Keys filter is a composite of a number of different variables.
+When a specific Tile is identified for further investigation, selecting it will result on a filter being applied to the Table view’s columns Topic and Keys. The Topic filter matches on the Topic name. The Keys filter is a composite of a number of different variables.
 
 ![Table View](assets/health/table-view.png)
 
