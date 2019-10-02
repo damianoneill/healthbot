@@ -1,0 +1,136 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>REST APIs · Juniper HealthBot</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Healthbot ships with an API Gateway, this is leveraged by the Healthbot Graphical User Interface. The same APIs can be invoked directly by users to build applications that can be enriched by information available within Healthbot."/><meta name="docsearch:version" content="2.0.2"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="REST APIs · Juniper HealthBot"/><meta property="og:type" content="website"/><meta property="og:url" content="https://damianoneill.github.io/healthbot/"/><meta property="og:description" content="Healthbot ships with an API Gateway, this is leveraged by the Healthbot Graphical User Interface. The same APIs can be invoked directly by users to build applications that can be enriched by information available within Healthbot."/><meta property="og:image" content="https://damianoneill.github.io/healthbot/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://damianoneill.github.io/healthbot/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/healthbot/img/favicon.ico"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/healthbot/js/scrollSpy.js"></script><link rel="stylesheet" href="/healthbot/css/main.css"/><script src="/healthbot/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/healthbot/"><img class="logo" src="/healthbot/img/favicon.ico" alt="Juniper HealthBot"/><h2 class="headerTitleWithLogo">Juniper HealthBot</h2></a><a href="/healthbot/versions"><h3>2.0.2</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/healthbot/docs/intro" target="_self">Guides</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search" title="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Guides</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul class=""><li class="navListItem"><a class="navItem" href="/healthbot/docs/intro">Overview</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/quickstart">Quickstart</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/device-health">Device Health</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/healthbot/docs/rest-api">REST APIs</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/glossary">Glossary</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">REST APIs</h1></header><article><div><span><p>Healthbot ships with an API Gateway, this is leveraged by the Healthbot Graphical User Interface. The same APIs can be invoked directly by users to build applications that can be enriched by information available within Healthbot.</p>
+<p>This guide provides an overview of a tool, <a href="https://www.getpostman.com/">Postman</a>, and some examples, that can be used to demonstrate the APIs that exist within Healthbot.</p>
+<h2><a class="anchor" aria-hidden="true" id="rest"></a><a href="#rest" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>REST</h2>
+<p>REST is an overloaded term, in the context of Healthbot it can be viewed as a solution for exposing information via HTTP for consumption by third parties.</p>
+<p><img src="/healthbot/docs/assets/rest-api/what_is_rest_api.png" alt="What is REST"></p>
+<p>For a more detailed definition and the source of the image above, see <a href="https://phpenthusiast.com/blog/what-is-rest-api">What is REST API</a>?</p>
+<h2><a class="anchor" aria-hidden="true" id="postman"></a><a href="#postman" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Postman</h2>
+<p>Postman is currently one of the most popular tools used in API testing.</p>
+<p>Being an Open Source tool, Postman can be easily downloaded and installed from here <a href="https://www.getpostman.com/downloads/">https://www.getpostman.com/downloads/</a></p>
+<p>As part of the installation, the installer will ask the user to sign up for an account, for our purposes, this is not needed and can be skipped.</p>
+<p>Once the installation completes, the startup screen will look as follows.</p>
+<p><img src="/healthbot/docs/assets/rest-api/postman-startup.png" alt="Postman startup screen"></p>
+<h2><a class="anchor" aria-hidden="true" id="first-request"></a><a href="#first-request" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>First Request</h2>
+<p>We will begin by making a request against Healthbot to retrieve information, if you reviewed the material at <a href="https://phpenthusiast.com/blog/what-is-rest-api">What is REST API</a> you will know that this is a HTTP GET Request. To make this request we will need the following information.</p>
+<ul>
+<li>Healthbot Server IP Address and Port</li>
+<li>Healthbot Username and Password</li>
+<li>URL for a Healthbot Resource that we want to retrieve information about</li>
+</ul>
+<p>However, before beginning, we need to modify the default configuration in Postman to allow it to make calls against servers with self signed certificates. To do this open Postman -&gt; Preferences / Settings -&gt; General and disable <strong>SSL Certificate Validation</strong>.</p>
+<p><img src="/healthbot/docs/assets/rest-api/ssl.png" alt="Disable SSL Certificate Certification"></p>
+<p>This is a one time task, once this is completed we create a new request by using the information collected above to invoke a REST call against our Healthbot Server instance.</p>
+<p><img src="/healthbot/docs/assets/rest-api/first-request.png" alt="First Request"></p>
+<p>From the screenshot you can see that we selected the HTTP Verb <strong>GET</strong>, provided a URL that contains the <strong>server-ip:port</strong>(66.129.235.12:47004) as well as the URI <strong>/api/v1/devices/</strong> and that in the Authentication Tab we selected <strong>Basic Auth</strong> from the drop down menu and added our credentials(username: jcluser) for the Healthbot instance.</p>
+<p>Assuming that the details are correct, we get a valid response back containing a JSON representation of the registered Devices, see below for an example from my server.</p>
+<pre><code class="hljs css language-json">{
+  <span class="hljs-attr">"device"</span>: [
+    {
+      <span class="hljs-attr">"device-id"</span>: <span class="hljs-string">"R1"</span>,
+      <span class="hljs-attr">"host"</span>: <span class="hljs-string">"100.123.1.0"</span>,
+      <span class="hljs-attr">"open-config"</span>: {
+        <span class="hljs-attr">"port"</span>: <span class="hljs-number">32767</span>
+      },
+      <span class="hljs-attr">"variable"</span>: []
+    },
+    {
+      <span class="hljs-attr">"device-id"</span>: <span class="hljs-string">"R2"</span>,
+      <span class="hljs-attr">"host"</span>: <span class="hljs-string">"100.123.1.1"</span>,
+      <span class="hljs-attr">"open-config"</span>: {
+        <span class="hljs-attr">"port"</span>: <span class="hljs-number">32767</span>
+      },
+      <span class="hljs-attr">"variable"</span>: []
+    },
+
+    ...
+</code></pre>
+<p>You can see from the returned response, that the Devices Resource contains information pertaining to the configuration screen for Devices for e.g. the id, host, protocol ports used for telemetry, etc.</p>
+<h2><a class="anchor" aria-hidden="true" id="healthbot-collection"></a><a href="#healthbot-collection" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Healthbot Collection</h2>
+<p>Each instance of Healthbot includes full documentation of the available REST APIs, these can be viewed on your server at <strong>https://&lt;server:port&gt;/api/v1/</strong></p>
+<p>Postman provides a way of defining a number of API Requests and bundling these in what it calls a collection. This guide includes a Collection for a number of the common Healthbot API Requests. The Collection is available for import into Postman.</p>
+<p><a href="/healthbot/docs/assets/Healthbot.postman_collection.json">Healthbot Postman Collection</a></p>
+<p>To import the Collection into Postman, first save this file locally, then in Postman, click the Import button in the header bar. In the IMPORT modal, select the Collection JSON file to upload it.</p>
+<p><img src="/healthbot/docs/assets/rest-api/import-collection.png" alt="Healthbot Import Collection"></p>
+<p>Once this completes successfully, you should see the Healthbot Collection on the left-hand side, with folders containing a number of requests (these will be added to over time). As new requests are added to the collection.json file, you will need to repeat the import process (described above) to avail of these.</p>
+<p><img src="/healthbot/docs/assets/rest-api/collection.png" alt="Healthbot Collection"></p>
+<p>At this point we can update the Collection to point to your Healthbot Server by changing the Collection variable <strong>server-port</strong> and the <strong>Basic Auth Credentials</strong> to use the correct values for your installation.</p>
+<p><img src="/healthbot/docs/assets/rest-api/edit-collection.png" alt="Edit Collection"></p>
+<p>Selecting the <strong>...</strong> at the Collection name shows a drop-down menu with an option to edit, selecting this allows you to make global changes to the Collection.</p>
+<p><img src="/healthbot/docs/assets/rest-api/server-port-auth.png" alt="Global Edit Collection"></p>
+<p>On the screen there is a tab where your Basic Auth Credentials can be edited and a tab where the server:port can be updated to reflect your Healthbot installation. Once this is complete, all requests in this Collection will execute against your Healthbot server using your credentials.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/healthbot/docs/device-health"><span class="arrow-prev">← </span><span>Device Health</span></a><a class="docs-next button" href="/healthbot/docs/glossary"><span>Glossary</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#rest">REST</a></li><li><a href="#postman">Postman</a></li><li><a href="#first-request">First Request</a></li><li><a href="#healthbot-collection">Healthbot Collection</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"></section><section class="copyright">Copyright © 2019 Damian ONeill</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+                document.addEventListener('keyup', function(e) {
+                  if (e.target !== document.body) {
+                    return;
+                  }
+                  // keyCode for '/' (slash)
+                  if (e.keyCode === 191) {
+                    const search = document.getElementById('search_input_react');
+                    search && search.focus();
+                  }
+                });
+              </script><script>
+              var search = docsearch({
+                
+                apiKey: '2e913bb4f70eeb0a94d6bd656899a3c1',
+                indexName: 'juniper_healthbot',
+                inputSelector: '#search_input_react',
+                algoliaOptions: {"facetFilters":["version:2.0.2"]}
+              });
+            </script></body></html>
