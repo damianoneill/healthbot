@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "641c92e5-c8bd-45ac-a0f5-bae1d8cddf8b",
+    "_postman_id": "ffed178b-befd-4404-b434-b28791717019",
     "name": "Healthbot",
     "description": "The collection contains API Requests that can be used against the API Gateway bundled with Healthbot.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -166,6 +166,26 @@
         }
       ],
       "protocolProfileBehavior": {}
+    },
+    {
+      "name": "API Documentation",
+      "item": [
+        {
+          "name": "Get All API Documentation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://{{server-port}}/api/v1/",
+              "protocol": "https",
+              "host": ["{{server-port}}"],
+              "path": ["api", "v1", ""]
+            }
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
     }
   ],
   "auth": {
@@ -203,19 +223,19 @@
   ],
   "variable": [
     {
-      "id": "8dc968a8-cbb7-49b3-ad59-82808c300b0e",
+      "id": "a6c31fbb-82a5-42f5-af91-bf40e6b62b08",
       "key": "server-port",
-      "value": "localhost:8080",
+      "value": "66.129.235.10:43004",
       "type": "string"
     },
     {
-      "id": "adf9d588-c0b2-4a0d-884f-96d6b9248685",
+      "id": "19f05ec5-2708-4e6d-937e-ca5a68b7ef0b",
       "key": "username",
       "value": "jcluser",
       "type": "string"
     },
     {
-      "id": "23e63357-8d40-4165-b7a1-98b9a38b84a1",
+      "id": "f03851ba-5a2a-44f6-ab73-597a7b0cff73",
       "key": "password",
       "value": "Juniper!1",
       "type": "string"
