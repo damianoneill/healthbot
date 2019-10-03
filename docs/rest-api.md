@@ -98,7 +98,7 @@ Selecting the **...** at the Collection name shows a drop-down menu with an opti
 
 ![Global Edit Collection](assets/rest-api/server-port-auth.png)
 
-On the screen there is a tab where your Basic Auth Credentials can be edited and a tab where the server:port can be updated to reflect your Healthbot installation. Once this is complete, all requests in this Collection will execute against your Healthbot server using your credentials.
+On the screen there is a tab where the Healthbot **server:port**, **username** and **password** can be updated (changes should be made to the **Current Value** column) to reflect your Healthbot installation. Once this is complete, all requests in this Collection will execute against your Healthbot server using your credentials.
 
 ## Building an Application
 

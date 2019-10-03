@@ -3,7 +3,7 @@ id: playbooks-rules
 title: Playbooks and Rules
 ---
 
-Once Devices are registered within Healthbot and assigned to one or more Device Groups, the remaining part of the configuration stage is to instantiate one or more Playbooks against the set of Device Groups. If you have worked through the Quickstart Guide, you will remember that Playbooks are a key abstraction within Healthbot, through Rules they provide a language for describing KPI's and how-to react to them.
+Once Devices are registered within Healthbot and assigned to one or more Device Groups, the remaining part of the configuration stage is to instantiate one or more Playbooks against the set of Device Groups. If you have worked through the [Quickstart](quickstart) Guide, you will remember that Playbooks are a key abstraction within Healthbot, through Rules they provide a language for describing KPI's and how-to react to them.
 
 So to better understand Playbooks, we first need to understand Rules.
 
@@ -53,6 +53,10 @@ mgd responsibilities include:
 - Parsing commands
 
 To access the cli we will use ssh forwarding to the Healthbot server and connect to the cli through the mgd container running in Healthbot.
+
+> ssh-copy-id installs an SSH key on a server as an authorized key. Its purpose is to provision access without requiring a password for each login. This facilitates automated, passwordless logins and single sign-on using the SSH protocol.
+
+> DOCKER_HOST defines the Docker Daemon socket to connect to, in this case the Docker Daemon is connected to over the SSH Port. This requires Docker 18.09+
 
 ```sh
 $ ssh-copy-id jcluser@66.129.235.13 -p 43001 # optionally use a different port for SSH if required
