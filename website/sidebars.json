@@ -1,5 +1,12 @@
 {
   "docs": {
-    "Guides": ["intro", "quickstart", "device-health", "rest-api", "glossary"]
+    "Guides": [
+      "intro",
+      "quickstart",
+      "device-health",
+      "playbooks-rules",
+      "rest-api",
+      "glossary"
+    ]
   }
 }
