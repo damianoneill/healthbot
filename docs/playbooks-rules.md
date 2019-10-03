@@ -122,16 +122,56 @@ In this section, we will look at the parts that make up a Rule. We will see how 
 
 #### Sensors
 
+As can be seen from the **show configuration** on the Sensor above, Sensors are defined by;
+
+- Sensor Name
+- Sensor Type; OpenConfig, Native GBP, iAgent (NETCONF) or SNMP
+- Frequency
+
+Depending on the Type selected, additional configuration will be required to complete the Sensor definition. For e.g. if OpenConfig is selected a sub-path (sensor-name) can be used to filter out content not relevant to this Rule.
+
+```diff
+- TODO
+```
+
 #### Fields
+
+```diff
+- TODO
+```
 
 #### Vectors
 
+```diff
+- TODO
+```
+
 #### Variables
+
+```diff
+- TODO
+```
 
 #### Functions
 
+```diff
+- TODO
+```
+
 #### Triggers
+
+```diff
+- TODO
+```
 
 #### Rule Properties
 
+```diff
+- TODO
+```
+
 ## Playbooks
+
+```diff
+- TODO
+```

@@ -23,6 +23,8 @@ Being an Open Source tool, Postman can be easily downloaded and installed from h
 
 As part of the installation, the installer will ask the user to sign up for an account, for our purposes, this is not needed and can be skipped.
 
+> Postman started out making REST Requests against API Servers (specifically the functionality were using), it has since then added cloud functionality to broaden its appeal in a cross team environment. Since we are only using the core functionality (making REST Requests) there is no need for the user to register against their cloud service for our scenarios.
+
 Once the installation completes, the startup screen will look as follows.
 
 ![Postman startup screen](assets/rest-api/postman-startup.png)
