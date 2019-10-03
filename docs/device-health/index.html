@@ -68,6 +68,9 @@
 <p>In this example the rule <strong>check-system-cpu-load-average</strong> in the topic <strong>system.cpu</strong> has a trigger (KPI) defined called <strong>cpu-utilization-15min</strong> that on a <strong>60 second</strong> frequency determines whether 15 minute CPU Utilization is normal or abnormal. You can see the KPI definition in the below screenshot.</p>
 <p><img src="/healthbot/docs/assets/health/kpi-definition.png" alt="Health KPI"></p>
 <p>For a full list of the KPIs available on your system you can make a <a href="https://curl.haxx.se/">curl</a> query against the REST API shipped with Healthbot and use <a href="https://stedolan.github.io/jq/">jq</a> to filter the response.</p>
+<blockquote>
+<p>jq is like sed for JSON data - you can use it to slice and filter and map and transform structured data with the same ease that sed, awk, grep and friends let you play with text.</p>
+</blockquote>
 <pre><code class="hljs css language-sh">curl -s -X GET <span class="hljs-string">"https://&lt;server:port&gt;/api/v1/topics/"</span> -H <span class="hljs-string">"accept: application/json"</span> -H <span class="hljs-string">"Content-Type: application/json"</span> -u &lt;username:password&gt; --insecure | jq <span class="hljs-string">'.topic[].rule[].trigger[]? | {name: .["trigger-name"], description: .description}'</span>
 </code></pre>
 <p>Will return a list of json objects with the KPI name and a description of the KPI.</p>
