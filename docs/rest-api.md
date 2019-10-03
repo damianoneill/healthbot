@@ -97,3 +97,56 @@ Selecting the **...** at the Collection name shows a drop-down menu with an opti
 ![Global Edit Collection](assets/rest-api/server-port-auth.png)
 
 On the screen there is a tab where your Basic Auth Credentials can be edited and a tab where the server:port can be updated to reflect your Healthbot installation. Once this is complete, all requests in this Collection will execute against your Healthbot server using your credentials.
+
+## Building an Application
+
+Postman provides a scaffolding solution for generating application code based on Requests. We can use this to create a simple application in a variety of different languages to demonstrate an API call against Healthbot.
+
+![Postman Code](assets/rest-api/postman-code.png)
+
+By selecting the **code button** on the right-hand side of a Postman Request window, we will get a pop-up dialogue where we can select from a number of different languages.
+
+In the screenshot I have selected a Golang example as shown below.
+
+```go
+package main
+
+import (
+	"fmt"
+	"strings"
+	"net/http"
+	"io/ioutil"
+)
+
+func main() {
+
+	url := "https://66.129.235.13:43004/api/v1/device-groups/"
+
+	payload := strings.NewReader("{\n  \"device-group\": [\n    {\n      \"authentication\": {\n        \"password\": {\n          \"password\": \"Juniper!1\",\n          \"username\": \"jcluser\"\n        }\n      },\n      \"description\": \"Devices that are Customer Facing\",\n      \"device-group-name\": \"Customer-Equipment\",\n      \"devices\": [\"R1\", \"R2\", \"R3\"],\n      \"notification\": {},\n      \"playbooks\": [\n        \"chassis-kpis-playbook\"\n      ],\n      \"reports\": [],\n      \"variable\": []\n    }\n  ]\n}")
+
+	req, _ := http.NewRequest("POST", url, payload)
+
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Basic amNsdXNlcjpKdW5pcGVyITE=")
+	req.Header.Add("User-Agent", "PostmanRuntime/7.17.1")
+	req.Header.Add("Accept", "*/*")
+	req.Header.Add("Cache-Control", "no-cache")
+	req.Header.Add("Postman-Token", "f536ca40-f0d1-476a-96df-5507e4b23dfe,ca07fa8c-eefc-4cfa-8d84-54516fecca68")
+	req.Header.Add("Host", "66.129.235.13:43004")
+	req.Header.Add("Accept-Encoding", "gzip, deflate")
+	req.Header.Add("Content-Length", "446")
+	req.Header.Add("Connection", "keep-alive")
+	req.Header.Add("cache-control", "no-cache")
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	fmt.Println(res)
+	fmt.Println(string(body))
+
+}
+```
+
+In this sample code we can see a call to the Healthbot server @ to create a Device Group called Customer-Equipment, containing 3 Devices; R1, R2, R3 using the chassis-kpi-playbook.

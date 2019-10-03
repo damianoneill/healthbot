@@ -1,220 +1,225 @@
 {
-	"info": {
-		"_postman_id": "2c08a811-eca5-4ba1-99ae-e673bf912b0a",
-		"name": "Healthbot",
-		"description": "The collection contains API Requests that can be used against the API Gateway bundled with Healthbot.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "Devices",
-			"item": [
-				{
-					"name": "Get All Devices",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"url": {
-							"raw": "https://{{server-port}}/api/v1/devices/",
-							"protocol": "https",
-							"host": [
-								"{{server-port}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"devices",
-								""
-							]
-						},
-						"description": "Retrieve high level information about the Devices registered with this Healthbot Server"
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Device Groups",
-			"item": [
-				{
-					"name": "Get All Device Groups",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json",
-								"disabled": true
-							},
-							{
-								"key": "Accept",
-								"type": "text",
-								"value": "application/json",
-								"disabled": true
-							}
-						],
-						"url": {
-							"raw": "https://{{server-port}}/api/v1/device-groups/",
-							"protocol": "https",
-							"host": [
-								"{{server-port}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"device-groups",
-								""
-							]
-						},
-						"description": "Retrieve high level information about the Device Groups registered with this Healthbot Server"
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Playbooks",
-			"item": [
-				{
-					"name": "Get All Playbooks",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json",
-								"disabled": true
-							},
-							{
-								"key": "Accept",
-								"type": "text",
-								"value": "application/json",
-								"disabled": true
-							}
-						],
-						"url": {
-							"raw": "https://{{server-port}}/api/v1/playbooks/",
-							"protocol": "https",
-							"host": [
-								"{{server-port}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"playbooks",
-								""
-							]
-						},
-						"description": "Retrieve high level information about the Playbooks registered with this Healthbot Server"
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Topics",
-			"item": [
-				{
-					"name": "Get All Topics",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json",
-								"disabled": true
-							},
-							{
-								"key": "Accept",
-								"type": "text",
-								"value": "application/json",
-								"disabled": true
-							}
-						],
-						"url": {
-							"raw": "https://{{server-port}}/api/v1/topics/",
-							"protocol": "https",
-							"host": [
-								"{{server-port}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"topics",
-								""
-							]
-						},
-						"description": "Retrieve high level information about the Topics registered with this Healthbot Server"
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		}
-	],
-	"auth": {
-		"type": "basic",
-		"basic": [
-			{
-				"key": "password",
-				"value": "Juniper!1",
-				"type": "string"
-			},
-			{
-				"key": "username",
-				"value": "jcluser",
-				"type": "string"
-			}
-		]
-	},
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"id": "c508ba8c-c05e-4d1b-b468-3883443883e3",
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"id": "1efeaab3-1179-480f-b423-3b400f70132a",
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"id": "c1fced53-a612-41ee-a560-59f78bf63dd4",
-			"key": "server-port",
-			"value": "localhost:8080",
-			"type": "string"
-		}
-	],
-	"protocolProfileBehavior": {}
+  "info": {
+    "_postman_id": "641c92e5-c8bd-45ac-a0f5-bae1d8cddf8b",
+    "name": "Healthbot",
+    "description": "The collection contains API Requests that can be used against the API Gateway bundled with Healthbot.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Devices",
+      "item": [
+        {
+          "name": "Get All Devices",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "https://{{server-port}}/api/v1/devices/",
+              "protocol": "https",
+              "host": ["{{server-port}}"],
+              "path": ["api", "v1", "devices", ""]
+            },
+            "description": "Retrieve high level information about the Devices registered with this Healthbot Server"
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
+    },
+    {
+      "name": "Device Groups",
+      "item": [
+        {
+          "name": "Get All Device Groups",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json",
+                "disabled": true
+              },
+              {
+                "key": "Accept",
+                "type": "text",
+                "value": "application/json",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "https://{{server-port}}/api/v1/device-groups/",
+              "protocol": "https",
+              "host": ["{{server-port}}"],
+              "path": ["api", "v1", "device-groups", ""]
+            },
+            "description": "Retrieve high level information about the Device Groups registered with this Healthbot Server"
+          },
+          "response": []
+        },
+        {
+          "name": "Create / Update Device Groups",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"device-group\": [\n    {\n      \"authentication\": {\n        \"password\": {\n          \"password\": \"{{password}}\",\n          \"username\": \"{{username}}\"\n        }\n      },\n      \"description\": \"Devices that are Customer Facing\",\n      \"device-group-name\": \"Customer-Equipment\",\n      \"devices\": [\"R1\", \"R2\", \"R3\"],\n      \"notification\": {},\n      \"playbooks\": [\n        \"chassis-kpis-playbook\"\n      ],\n      \"reports\": [],\n      \"variable\": []\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "https://{{server-port}}/api/v1/device-groups/",
+              "protocol": "https",
+              "host": ["{{server-port}}"],
+              "path": ["api", "v1", "device-groups", ""]
+            },
+            "description": "Create/Update multiple device-groups. The new content for the existing device-groups updates the existing content and new device-groups are created."
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
+    },
+    {
+      "name": "Playbooks",
+      "item": [
+        {
+          "name": "Get All Playbooks",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json",
+                "disabled": true
+              },
+              {
+                "key": "Accept",
+                "type": "text",
+                "value": "application/json",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "https://{{server-port}}/api/v1/playbooks/",
+              "protocol": "https",
+              "host": ["{{server-port}}"],
+              "path": ["api", "v1", "playbooks", ""]
+            },
+            "description": "Retrieve high level information about the Playbooks registered with this Healthbot Server"
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
+    },
+    {
+      "name": "Topics",
+      "item": [
+        {
+          "name": "Get All Topics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json",
+                "disabled": true
+              },
+              {
+                "key": "Accept",
+                "type": "text",
+                "value": "application/json",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "https://{{server-port}}/api/v1/topics/",
+              "protocol": "https",
+              "host": ["{{server-port}}"],
+              "path": ["api", "v1", "topics", ""]
+            },
+            "description": "Retrieve high level information about the Topics registered with this Healthbot Server"
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "password",
+        "value": "{{password}}",
+        "type": "string"
+      },
+      {
+        "key": "username",
+        "value": "{{username}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "c508ba8c-c05e-4d1b-b468-3883443883e3",
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "1efeaab3-1179-480f-b423-3b400f70132a",
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "id": "8dc968a8-cbb7-49b3-ad59-82808c300b0e",
+      "key": "server-port",
+      "value": "localhost:8080",
+      "type": "string"
+    },
+    {
+      "id": "adf9d588-c0b2-4a0d-884f-96d6b9248685",
+      "key": "username",
+      "value": "jcluser",
+      "type": "string"
+    },
+    {
+      "id": "23e63357-8d40-4165-b7a1-98b9a38b84a1",
+      "key": "password",
+      "value": "Juniper!1",
+      "type": "string"
+    }
+  ],
+  "protocolProfileBehavior": {}
 }
