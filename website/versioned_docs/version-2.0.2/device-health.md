@@ -32,6 +32,8 @@ In this example the rule **check-system-cpu-load-average** in the topic **system
 
 For a full list of the KPIs available on your system you can make a [curl](https://curl.haxx.se/) query against the REST API shipped with Healthbot and use [jq](https://stedolan.github.io/jq/) to filter the response.
 
+> jq is like sed for JSON data - you can use it to slice and filter and map and transform structured data with the same ease that sed, awk, grep and friends let you play with text.
+
 ```sh
 curl -s -X GET "https://<server:port>/api/v1/topics/" -H "accept: application/json" -H "Content-Type: application/json" -u <username:password> --insecure | jq '.topic[].rule[].trigger[]? | {name: .["trigger-name"], description: .description}'
 ```

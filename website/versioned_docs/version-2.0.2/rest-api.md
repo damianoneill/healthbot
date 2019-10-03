@@ -14,7 +14,7 @@ REST is an overloaded term, in the context of Healthbot it can be viewed as a so
 
 ![What is REST](assets/rest-api/what_is_rest_api.png)
 
-For a more detailed definition and the source of the image above, see [What is REST API](https://phpenthusiast.com/blog/what-is-rest-api)?
+> For a more detailed definition and the source of the image above, see [What is REST API](https://phpenthusiast.com/blog/what-is-rest-api)?
 
 ## Postman
 
