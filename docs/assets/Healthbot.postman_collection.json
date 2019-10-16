@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "ffed178b-befd-4404-b434-b28791717019",
+    "_postman_id": "5d910b3c-d384-4619-a295-de7307a27467",
     "name": "Healthbot",
     "description": "The collection contains API Requests that can be used against the API Gateway bundled with Healthbot.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -186,6 +186,112 @@
         }
       ],
       "protocolProfileBehavior": {}
+    },
+    {
+      "name": "Helper Files",
+      "item": [
+        {
+          "name": "Get all Helper Filenames",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://{{server-port}}/api/v1/files/helper-files/",
+              "protocol": "https",
+              "host": ["{{server-port}}"],
+              "path": ["api", "v1", "files", "helper-files", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Download a Helper File",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "https://{{server-port}}/api/v1/files/helper-files/{{helper-file}}/",
+              "protocol": "https",
+              "host": ["{{server-port}}"],
+              "path": [
+                "api",
+                "v1",
+                "files",
+                "helper-files",
+                "{{helper-file}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload a Helper File",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/x-www-form-urlencoded",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "up_file",
+                  "type": "file",
+                  "src": "/Users/doneill/Downloads/ptp-lock-status.yml"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://{{server-port}}/api/v1/files/helper-files/{{helper-file}}/",
+              "protocol": "https",
+              "host": ["{{server-port}}"],
+              "path": [
+                "api",
+                "v1",
+                "files",
+                "helper-files",
+                "{{helper-file}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
     }
   ],
   "auth": {
@@ -223,21 +329,27 @@
   ],
   "variable": [
     {
-      "id": "a6c31fbb-82a5-42f5-af91-bf40e6b62b08",
+      "id": "c7b6d6ee-5223-4019-9e12-22b7f633177e",
       "key": "server-port",
       "value": "66.129.235.10:43004",
       "type": "string"
     },
     {
-      "id": "19f05ec5-2708-4e6d-937e-ca5a68b7ef0b",
+      "id": "d766f006-2c0a-4782-b271-e41c093272d1",
       "key": "username",
       "value": "jcluser",
       "type": "string"
     },
     {
-      "id": "f03851ba-5a2a-44f6-ab73-597a7b0cff73",
+      "id": "e9c9fa09-f6f2-433a-b1ff-b3e1135e2191",
       "key": "password",
       "value": "Juniper!1",
+      "type": "string"
+    },
+    {
+      "id": "469f2bbd-e719-48cc-9f4f-eb5e65b0bdcf",
+      "key": "helper-file",
+      "value": "ptp-lock-status.yml",
       "type": "string"
     }
   ],
