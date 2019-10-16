@@ -120,6 +120,32 @@ open-config {
 
 This shows that we can see the configuration for the OpenConfig sensor **components**, that exist in **check-chassis-temperature**, which is a System Rule in the Topic **chassis.temperatures**.
 
+Before we look at the Rule components, lets discuss the use case that we will author a Playbook and Ruleset against.
+
+### Time Management
+
+Increase in bandwidth requirements on wireless backhaul networks and the need to reduce costs and to improve flexibility have triggered the need for a packet-based backhaul infrastructure.
+
+Traditional metro deployments do not cater to the delivery of synchronization services, and this leaves operators with no other choice than to keep older parallel infrastructure. Physical layer–based Synchronous Ethernet and packet-based Precision Time Protocol (PTP) enable routers and switches to deliver synchronization services that meet the requirements of today’s mobile network, as well as Long Term Evolution (LTE)–based infrastructures.
+
+![PTP Overview](assets/rules/ptp-overview.jpg)
+
+PTP, also known as IEEE 1588v2, is a packet-based technology that enables the operator to deliver synchronization services on packet-based mobile backhaul networks. IEEE 1588 PTP (Version 2) clock synchronization standard is a highly precise protocol for time synchronization that synchronizes clocks in a distributed system. The time synchronization is achieved through packets that are transmitted and received in a session between a master clock and a slave clock.
+
+The system clocks can be categorized based on the role of the node in the network. They are broadly categorized into ordinary clocks and boundary clocks. The master clock and the slave clock are known as ordinary clocks. The boundary clock can operate as either a master clock or a slave clock. The following list explains these clocks in detail:
+
+- Master clock—The master clock transmits the messages to the PTP clients (also called slave node or boundary node). This allows the clients to establish their relative time distance and offset from the master clock (which is the reference point) for phase synchronization. Delivery mechanism to the clients is either unicast or multicast packets over Ethernet or UDP.
+- Slave clock—Located in the PTP client (also called slave or slave node), the slave clock performs clock and time recovery operations based on the received and requested timestamps from the master clock.
+- Boundary clock—The boundary clock operates as a combination of the master and slave clocks. The boundary clock endpoint acts as a slave clock to the master clock, and also acts as the master to all the slaves reporting to the boundary endpoint.
+
+For this guide we will monitor and act on the **Lock Status**, additional useful metrics are described below:
+
+- [Lock Status](https://www.juniper.net/documentation/en_US/junos/topics/reference/command-summary/show-ptp-lock-status.html) - shows the lock status of a slave in a PTP network
+- [Clock Class](https://www.juniper.net/documentation/en_US/junos/topics/reference/configuration-statement/clock-class-edit-protocols-ptp.html) - ESMC quality level
+- [Phase Offset](https://www.juniper.net/documentation/en_US/junos/topics/reference/command-summary/show-ptp-lock-status.html) - offset information of a slave clock with respect to its master clock
+
+For further information on PTP see [Configuring Precision Time Protocols](https://www.juniper.net/documentation/en_US/junos/topics/concept/ptp-overview.html).
+
 ### Components that make up a Rule
 
 In this section, we will look at the parts that make up a Rule. We will see how these components interact with each other to provide a Rule definition. Rule definition begins with identifying and describing the source of Telemetry that will 'feed' this rule, this is described in the Sensors component.
@@ -134,9 +160,183 @@ As can be seen from the **show configuration** on the Sensor above, Sensors are 
 
 Depending on the Type selected, additional configuration will be required to complete the Sensor definition. For e.g. if OpenConfig is selected a sub-path (sensor-name) can be used to filter out content not relevant to this Rule.
 
-```diff
-- TODO
+For our use case, the information that we are interested in is available over the NETCONF interface, so we will use the iAgent Ingest in Healthbot to retrieve the Sensor information.
+
+iAgent (Ingest Agent) uses [PyEZ](https://www.juniper.net/documentation/en_US/junos-pyez/information-products/pathway-pages/junos-pyez-developer-guide.html) to collect data from Junos Devices. Therefore, we will need to define NETCONF collection criteria to PyEZ for the PTP Attributes that we are interested in. This is done by using the [PyEZ Table and Views](https://www.juniper.net/documentation/en_US/junos-pyez/topics/concept/junos-pyez-tables-and-views-overview.html) concepts.
+
+> If you plan to create your own rules and use iAgent, it is strongly recommended that you read and work through the [PyEZ Developer Guide](https://www.juniper.net/documentation/en_US/junos-pyez/information-products/pathway-pages/junos-pyez-developer-guide.html).
+
+Junos PyEZ Tables and Views enable you to extract operational information and configuration data from devices running Junos OS as well as configure devices running Junos OS. To extract information, you use predefined or custom Tables and Views to map command output or configuration data to a table, which consists of a collection of items that can then be examined as a View.
+
+Once we have identified an Operational Command that gives us the information that we need for e.g.
+
+```console
+user@host> show ptp lock-status
+Lock Status:
+
+Lock State    : 5 (PHASE ALIGNED)
+Phase offset  : -0.000000013 sec
+
+user@host>
 ```
+
+We can use the [Junos XML API Explorer](https://apps.juniper.net/xmlapi/operTags.jsp) to determine how to collect this information from an API.
+
+All operational commands that have Junos XML counterparts are listed in the [Junos XML API Explorer](https://apps.juniper.net/xmlapi/operTags.jsp). We will use the Junos XML API Explorer to determine what commands are available. Searching on the criteria **get-ptp** returns a number of commands for e.g. **get-ptp-lock-status**.
+
+![Explorer](assets/rules/explorer.png)
+
+This is useful if you don't know where in the Junos CLI hierarchy the information is, in our case we had identified an operational command to use **show ptp lock-status** and therefore the solution below is more suitable.
+
+You can also display the Junos XML request tag element for any operational mode command that has a Junos XML counterpart on the CLI. To display the Junos XML request tag for a command in the CLI, include the **| display xml rpc** option after the command.
+
+```console
+user@host> show ptp lock-status | display xml rpc
+<rpc-reply xmlns:junos="http://xml.juniper.net/junos/19.3R0/junos">
+    <rpc>
+        <get-ptp-lock-status>
+        </get-ptp-lock-status>
+    </rpc>
+    <cli>
+        <banner></banner>
+    </cli>
+</rpc-reply>
+
+user@host>
+```
+
+Therefore, by sending an XML RPC command to a Junos Device as follows we will get back the information required on the lock status.
+
+```xml
+<rpc><get-ptp-lock-status></get-ptp-lock-status></rpc>
+```
+
+As discussed iAgent uses PyEZ so we will create a PyEZ Table and View definition to send and correlate the response of the RPC request above. In Junos PyEZ, you define inline Tables and Views in YAML as a multi line strings in your module. For example the file **ptp-lock-status.yml** would look like:
+
+```yaml
+PtpLockStatusTable:
+  rpc: get-ptp-lock-status
+  item: .
+  key: ptp-spll-lock-state
+  view: PtpLockStatusView
+
+PtpLockStatusView:
+  fields:
+    lockState: ptp-spll-lock-state
+```
+
+There are a few unusual components to this definition, since the response to get-ptp-lock-status is relatively flat (no arrays or nested structures) the use of the Tables item and key fields needs to be tailored specifically, note that the item value of **.** which indicates that we are retrieving information from the top-level structure and that the key is set explicitly to **ptp-spll-lock-state** later versions of Healthbot will introduce a **Null** concept for this scenario.
+
+To use this configuration we need to upload this file (**ptp-lock-status.yml**) to our Healthbot Server. We have three options for doing this:
+
+- On the Rules page, within the Graphical User Interface, using the **Upload Rules File** button at the top of the page.
+- Copying the file directly to the location on the server where these files are stored **/var/local/healthbot/input/**
+- Or by using the Postman Collection (Helper Files->Upload a Helper File) described in [REST APIs](rest-api#healthbot-collection) to upload this helper file.
+
+Once the file has been uploaded to the Healthbot Server, we can confirm this by printing its contents to standard out.
+
+```console
+[user@healthbothost rules]# cat /var/local/healthbot/rules/community_supplied/Protocols/Ptp/ptp-lock-status.yml
+PtpLockStatusTable:
+  rpc: get-ptp-lock-status
+  item: .
+  key: ptp-spll-lock-state
+  view: PtpLockStatusView
+
+PtpLockStatusView:
+  fields:
+    lockState: ptp-spll-lock-state
+```
+
+We can now use this configuration to define a Sensor within a Rule. As described [above](playbooks-rules#rule-builder-cli), we will use the Rule Builder CLI to create our definition.
+
+Once connected to the Rules Builder CLI via the DOCKER_HOST shell exec command above, we need to load the Healthbot configuration into mgd.
+
+```console
+root@db2d47fcc0ea> request iceberg load
+Getting "retention-policy" hierarchy configuration
+Done
+Getting "notification" hierarchy configuration
+Done
+...
+```
+
+Next we need to edit the mgd candidate configuration
+
+```console
+root@db2d47fcc0ea> edit
+Entering configuration mode
+
+[edit]
+root@db2d47fcc0ea#
+```
+
+At this point we can create any of the Healthbot abstractions; Device, Device Groups, Rules, Playbooks, etc. We will begin by creating a Rule for our PTP Lock Status use case.
+
+```console
+set iceberg topic external rule ptp-lock-status description "Display detailed information about the lock status of the slave" synopsis "Lock Status of the PTP Slave"
+```
+
+Finally, once we have a complete configuration, we can save this and exit the edit.
+
+```console
+[edit]
+root@db2d47fcc0ea# commit and-quit
+commit complete
+Exiting configuration mode
+```
+
+Committing the configuration into mgd database does not store our configuration in Healthbot.
+We need to run the following command to deploy the configuration into healthbot.
+
+```console
+root@db2d47fcc0ea> request iceberg deploy
+Received configuration from mgd ...
+Following python files are used in the configuration
+system-sensors.py, mean-pool-utilization.py, traffic_diff.py, used-percentage.py, mplslabel.py, system-processes.py, micro_milli.py
+Please make sure python files are copied under /var/local/healthbot/input directory, otherwise deploy will fail
+Do you want to continue (y/n) ? y
+Following iagent files are used in the configuration
+pci-error.yml, software-version.yml, chassis-fan.yml, fpc_memory.yml, jnh-ifd-stream.yml, cm-error.yml, traffic-statistics.yml, sync-ospf-fpc.yml, task-io.yml, system-virtual-memory.yml, re-cpu-utilization.yml, system-proc-ext.yml, ospf-neighbor.yml, online_fpc.yml, system-queues.yml, host-loopback-status.yml, system-statistics-ip.yml, jnhexceptionpkt.yml, ddos-statistics.yml, chip.yml, rsvpsession.yml, ptp-lock-status.yml, route-protocol-summary.yml, netsvc.yml, pfe-ddos-policer.yml, fib.yml, ithrottle.yml, pre-classifier.yml, fpc_link_stats.yml, route-summary.yml, icmp_statistics.yml, jnh-exceptions.yml, system-storage-capacity.yml, pfe-traffic-statistics.yml, toe-pfe.yml, task-memory.yml, ospf.yml, system-storage.yml, linecard-ethernet-statistics.yml, fpc-threads.yml, system-cpu.yml, chassis-power.yml, ospf-kernel-route.yml, fpc-utilization.yml, scheduler-info.yml
+Please make sure the user defined iagent files are copied under /var/local/healthbot/input directory, otherwise deploy will fail
+Do you want to continue (y/n) ? y
+Uploading "device" hierarchy configuration
+Done
+Uploading "topic" hierarchy configuration
+Done
+Uploading "playbook" hierarchy configuration
+Done
+...
+Configuration deploy complete
+
+root@db2d47fcc0ea>
+```
+
+At this point we have a Rule defined called ptp-lock-status, it exists in the external topic and it currently contains no configuration for any of the Rule Components: Sensors, Fields, Vectors, ...
+
+Let's go ahead now and create a Sensor definition based on the PyEZ yaml configuration (**ptp-lock-status.yml**) we previously uploaded to the server. So begin by editing the candidate configuration.
+
+```console
+root@db2d47fcc0ea> edit
+Entering configuration mode
+
+[edit]
+root@db2d47fcc0ea#
+```
+
+As before, lets use the set command to create a definition, this time for a sensor in the ptp-lock-status Rule.
+
+```console
+set iceberg topic external rule ptp-lock-status sensor ptp-lock-status description "An iAgent based Sensor, using the ptp-lock-status.yml configuration file" synopsis "iAgent PTP Sensor" iAgent file "ptp-lock-status.yml" table "PtpLockStatusTable" frequency 60s
+```
+
+As can be seen for above, the iAgent File, the Table defined within and the Frequency for how often iAgent will request this data from the Device are defined in the set command.
+
+As before **commit and-exit** and push the configuration from mgd to Healthbot using **request iceberg deploy**.
+
+At this point we have a valid Sensor definition, this can be verified by viewing the Rule on the Graphical User Interface.
+
+![Rule Sensor](assets/rules/rule-sensor.png)
 
 #### Fields
 
