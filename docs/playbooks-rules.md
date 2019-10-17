@@ -3,21 +3,21 @@ id: playbooks-rules
 title: Playbooks and Rules
 ---
 
-Once Devices are registered within Healthbot and assigned to one or more Device Groups, the remaining part of the configuration stage is to instantiate one or more Playbooks against the set of Device Groups. If you have worked through the [Quickstart](quickstart) Guide, you will remember that Playbooks are a key abstraction within Healthbot, through Rules they provide a language for describing KPI's and how-to react to them.
+Once Devices are registered within Healthbot and assigned to one or more Device Groups, the remaining part of the configuration stage is to instantiate one or more Playbooks against the set of Device Groups. If you have worked through the [Quickstart](quickstart) Guide, you will remember that Playbooks are a key abstraction within Healthbot, through Rules they provide a language for describing KPIs and how-to react to them.
 
 So to better understand Playbooks, we first need to understand Rules.
 
 ## Rules
 
-Healthbot is about capturing and reacting to Telemetry data, defining how-to capture and what way to react is the role of a [Rule](glossary#rule).
+Healthbot is primarily about capturing and reacting to Telemetry data, defining how-to capture and what way to react is the role of a [Rule](glossary#rule).
 
 Therefore, when defining a Rule we need a language that describes what a Rule is and does, where to receive data from, a way to filter or manipulate the data and then a way to react to this data meaningfully. In software terms, this type of language is called a **Domain Specific Language** (DSL), i.e. a language that is specific to one domain, in our case Healthbot Telemetry.
 
 ![Rules Components](assets/rules/rule-components.png)
 
-Healthbot is shipped with a set of default Rules, these Rules are available on Github at the [healthbot-rules](https://github.com/Juniper/healthbot-rules) repository. An example from this website shows an instance of the DSL targeted at defining a KPI for Temperature fluctuations within a Chassis [chassis-temperature.rule](https://raw.githubusercontent.com/Juniper/healthbot-rules/master/juniper_official/Chassis/chassis-temperature.rule), note the DSL instance definition ends with an extension **.rule** and follows a clear structure for the concepts I described above.
+Healthbot is shipped with a set of default Rules, available on Github at the [healthbot-rules](https://github.com/Juniper/healthbot-rules) repository. An example from this website shows an instance of the DSL targeted at defining a KPI for Temperature fluctuations within a Chassis [chassis-temperature.rule](https://raw.githubusercontent.com/Juniper/healthbot-rules/master/juniper_official/Chassis/chassis-temperature.rule), note the DSL instance definition ends with an extension **.rule** and follows a clear structure for the concepts described above.
 
-The default set of Rules can be extended either through [community supplied](https://github.com/Juniper/healthbot-rules/tree/master/community_supplied) Rules or through a Healthbot user creating their own Rules, this guide will predominantly be concerned with the latter.
+The default set of Rules can be extended either through loading [community supplied](https://github.com/Juniper/healthbot-rules/tree/master/community_supplied) Rules or by creating your own Rules, this guide will predominantly be concerned with the latter.
 
 ### Dashboard
 
@@ -25,34 +25,19 @@ Rules can be created, updated and deleted through the Dashboard, there is a dedi
 
 ![Rules Overview](assets/rules/rules-overview.png)
 
-This screen provides a visual representation of the Rules DSL. In this example, we can see for the Topic **system.processes**, there is a rule called **check-process-memory**, which analyses the system processes memory utilization. You can also see the **components** available within the DSL for defining a Rule.
+This screen provides a visual representation and editor of the Rules DSL. In this example, we can see for the [Topic](glossary#topic) **system.processes**, there is a rule called **check-process-memory**, which analyses the system processes memory utilization on a Device. You can also see the **components** available within the DSL for defining a Rule.
 
 Rather than using the Dashboard to define a Rule, we will use the Rule Builder CLI to construct our sample Rule.
 
 #### Rule Builder CLI
 
-The Rule Builder CLI is an extension to the JUNOS System Management Daemon (mgd).
+The Rule Builder CLI is an extension to the Junos System Management Daemon (mgd).
 
-The management daemon (mgd) provides a mechanism to process information for both network operators and daemons.
+The management daemon (mgd) provides a mechanism to process information for both network operators (CLI) and daemons (programmatically).
 
-The interactive component of mgd is the JUNOS cli; this is a terminal-based application that allows the network operator an interface into JUNOS. The other side of mgd is the extensible markup language (XML) remote procedure call (RPC) interface; This provides an API through Junoscript and NETCONF to allow for the development of automation applications.
+The interactive component of mgd is the Junos cli; this is a terminal-based application that allows the network operator an interface into Junos. The other side of mgd is the extensible markup language (XML) remote procedure call (RPC) interface; this provides an API through Junoscript and NETCONF to allow for the development of automation applications.
 
-The cli responsibilities are:
-
-- Command-line editing
-- Terminal emulation
-- Terminal paging
-- Displaying command and variable completions
-- Monitoring log files and interfaces
-- Executing child processes such as ping, traceroute, and ssh
-
-mgd responsibilities include:
-
-- Passing commands from the cli to the appropriate daemon
-- Finding command and variable completions
-- Parsing commands
-
-To access the cli we will use ssh forwarding to the Healthbot server and connect to the cli through the mgd container running in Healthbot.
+To access the cli (can also be done on the Web User Interface Rules Page) we will use ssh forwarding to the Healthbot server and connect to the cli through the mgd container running in Healthbot.
 
 > ssh-copy-id installs an SSH key on a server as an authorized key. Its purpose is to provision access without requiring a password for each login. This facilitates automated, passwordless logins and single sign-on using the SSH protocol.
 
@@ -120,7 +105,7 @@ open-config {
 
 This shows that we can see the configuration for the OpenConfig sensor **components**, that exist in **check-chassis-temperature**, which is a System Rule in the Topic **chassis.temperatures**.
 
-Before we look at the Rule components, lets discuss the use case that we will author a Playbook and Ruleset against.
+Before we look at the Rule components, let's discuss the use case that we will author a Playbook and Ruleset against.
 
 ### Time Management
 
@@ -140,15 +125,15 @@ The system clocks can be categorized based on the role of the node in the networ
 
 For this guide we will monitor and act on the **Lock Status**, additional useful metrics are described below:
 
-- [Lock Status](https://www.juniper.net/documentation/en_US/junos/topics/reference/command-summary/show-ptp-lock-status.html) - shows the lock status of a slave in a PTP network
-- [Clock Class](https://www.juniper.net/documentation/en_US/junos/topics/reference/configuration-statement/clock-class-edit-protocols-ptp.html) - ESMC quality level
-- [Phase Offset](https://www.juniper.net/documentation/en_US/junos/topics/reference/command-summary/show-ptp-lock-status.html) - offset information of a slave clock with respect to its master clock
+- [Lock Status](https://www.juniper.net/documentation/en_US/Junos/topics/reference/command-summary/show-ptp-lock-status.html) - shows the lock status of a slave in a PTP network
+- [Clock Class](https://www.juniper.net/documentation/en_US/Junos/topics/reference/configuration-statement/clock-class-edit-protocols-ptp.html) - ESMC quality level
+- [Phase Offset](https://www.juniper.net/documentation/en_US/Junos/topics/reference/command-summary/show-ptp-lock-status.html) - offset information of a slave clock with respect to its master clock
 
-For further information on PTP see [Configuring Precision Time Protocols](https://www.juniper.net/documentation/en_US/junos/topics/concept/ptp-overview.html).
+For further information on PTP see [Configuring Precision Time Protocols](https://www.juniper.net/documentation/en_US/Junos/topics/concept/ptp-overview.html).
 
 ### Components that make up a Rule
 
-In this section, we will look at the parts that make up a Rule. We will see how these components interact with each other to provide a Rule definition. Rule definition begins with identifying and describing the source of Telemetry that will 'feed' this rule, this is described in the Sensors component.
+In this section, we will look at a subset of the components that make up a Rule, specifically Sensors, Fields and Triggers. We will see how these components interact with each other to define the Rule. Rule definition begins with identifying and describing the source of Telemetry that will 'feed' this rule, this is described in the Sensors component.
 
 #### Sensors
 
@@ -158,17 +143,17 @@ As can be seen from the **show configuration** on the Sensor above, Sensors are 
 - Sensor Type; OpenConfig, Native GBP, iAgent (NETCONF) or SNMP
 - Frequency
 
-Depending on the Type selected, additional configuration will be required to complete the Sensor definition. For e.g. if OpenConfig is selected a sub-path (sensor-name) can be used to filter out content not relevant to this Rule.
+Depending on the Type selected, additional configuration will be required to complete the Sensor definition. For E.g. if OpenConfig is selected a sub-path (sensor-name) can be used to select content relevant to this Rule.
 
 For our use case, the information that we are interested in is available over the NETCONF interface, so we will use the iAgent Ingest in Healthbot to retrieve the Sensor information.
 
-iAgent (Ingest Agent) uses [PyEZ](https://www.juniper.net/documentation/en_US/junos-pyez/information-products/pathway-pages/junos-pyez-developer-guide.html) to collect data from Junos Devices. Therefore, we will need to define NETCONF collection criteria to PyEZ for the PTP Attributes that we are interested in. This is done by using the [PyEZ Table and Views](https://www.juniper.net/documentation/en_US/junos-pyez/topics/concept/junos-pyez-tables-and-views-overview.html) concepts.
+iAgent (Ingest Agent) uses [PyEZ](https://www.juniper.net/documentation/en_US/Junos-pyez/information-products/pathway-pages/Junos-pyez-developer-guide.html) (Python Microframework) to collect data from Junos Devices. Therefore, we will need to define NETCONF collection criteria to PyEZ for the PTP Attributes that we are interested in. This is done by using the [PyEZ Table and Views](https://www.juniper.net/documentation/en_US/Junos-pyez/topics/concept/Junos-pyez-tables-and-views-overview.html) concepts.
 
-> If you plan to create your own rules and use iAgent, it is strongly recommended that you read and work through the [PyEZ Developer Guide](https://www.juniper.net/documentation/en_US/junos-pyez/information-products/pathway-pages/junos-pyez-developer-guide.html).
+> If you plan to create your own rules and use iAgent, it is strongly recommended that you read and work through the [PyEZ Developer Guide](https://www.juniper.net/documentation/en_US/Junos-pyez/information-products/pathway-pages/Junos-pyez-developer-guide.html).
 
 Junos PyEZ Tables and Views enable you to extract operational information and configuration data from devices running Junos OS as well as configure devices running Junos OS. To extract information, you use predefined or custom Tables and Views to map command output or configuration data to a table, which consists of a collection of items that can then be examined as a View.
 
-Once we have identified an Operational Command that gives us the information that we need for e.g.
+Once we have identified an Operational Command that gives us the information that we need e.g.
 
 ```console
 user@host> show ptp lock-status
@@ -182,7 +167,7 @@ user@host>
 
 We can use the [Junos XML API Explorer](https://apps.juniper.net/xmlapi/operTags.jsp) to determine how to collect this information from an API.
 
-All operational commands that have Junos XML counterparts are listed in the [Junos XML API Explorer](https://apps.juniper.net/xmlapi/operTags.jsp). We will use the Junos XML API Explorer to determine what commands are available. Searching on the criteria **get-ptp** returns a number of commands for e.g. **get-ptp-lock-status**.
+All operational commands that have Junos XML counterparts are listed in the [Junos XML API Explorer](https://apps.juniper.net/xmlapi/operTags.jsp). We will use the Junos XML API Explorer to determine what commands are available. Searching on the criteria **get-ptp** returns a number of commands e.g. **get-ptp-lock-status**.
 
 ![Explorer](assets/rules/explorer.png)
 
@@ -192,7 +177,7 @@ You can also display the Junos XML request tag element for any operational mode 
 
 ```console
 user@host> show ptp lock-status | display xml rpc
-<rpc-reply xmlns:junos="http://xml.juniper.net/junos/19.3R0/junos">
+<rpc-reply xmlns:Junos="http://xml.juniper.net/Junos/19.3R0/Junos">
     <rpc>
         <get-ptp-lock-status>
         </get-ptp-lock-status>
@@ -225,13 +210,13 @@ PtpLockStatusView:
     lockState: ptp-spll-lock-state
 ```
 
-There are a few unusual components to this definition, since the response to get-ptp-lock-status is relatively flat (no arrays or nested structures) the use of the Tables item and key fields needs to be tailored specifically, note that the item value of **.** which indicates that we are retrieving information from the top-level structure and that the key is set explicitly to **ptp-spll-lock-state** later versions of Healthbot will introduce a **Null** concept for this scenario.
+There are a few unusual components to this definition, since the response to **get-ptp-lock-status** is relatively flat (no arrays or nested structures) the use of the Tables item and key fields needs to be tailored specifically, note item **.** which indicates that we are retrieving information from the top-level structure and that the key is set explicitly to **ptp-spll-lock-state** later versions of Healthbot will introduce a **Null** concept for this scenario.
 
 To use this configuration we need to upload this file (**ptp-lock-status.yml**) to our Healthbot Server. We have three options for doing this:
 
 - On the Rules page, within the Graphical User Interface, using the **Upload Rules File** button at the top of the page.
 - Copying the file directly to the location on the server where these files are stored **/var/local/healthbot/input/**
-- Or by using the Postman Collection (Helper Files->Upload a Helper File) described in [REST APIs](rest-api#healthbot-collection) to upload this helper file.
+- By using the Postman Collection (Helper Files->Upload a Helper File) described in [REST APIs](rest-api#healthbot-collection) to upload this helper file.
 
 Once the file has been uploaded to the Healthbot Server, we can confirm this by printing its contents to standard out.
 
@@ -324,7 +309,7 @@ Entering configuration mode
 root@db2d47fcc0ea#
 ```
 
-As before, lets use the set command to create a definition, this time for a sensor in the ptp-lock-status Rule.
+As before, let's use the set command to create a definition, this time for a sensor in the ptp-lock-status Rule.
 
 ```console
 set iceberg topic external rule ptp-lock-status sensor ptp-lock-status description "An iAgent based Sensor, using the ptp-lock-status.yml configuration file" synopsis "iAgent PTP Sensor" iAgent file "ptp-lock-status.yml" table "PtpLockStatusTable" frequency 60s
@@ -340,42 +325,56 @@ At this point we have a valid Sensor definition, this can be verified by viewing
 
 #### Fields
 
-```diff
-- TODO
+Typically when a Sensor is defined, it contains more than one piece of data. Fields provides a solution to chery-picking the specific data that your interested in within the Sensor.
+
+In our use case we need to define a Field to represent the lock status. This will expose the integer value for the NETCONF leaf ptp-spll-lock-state. We can do this as before using the Rule Builder CLI.
+
+```console
+set iceberg topic external rule ptp-lock-status field lock-status description "extract the ptp-spll-lock-state for processing" type integer sensor ptp-lock-status path "lockState"
 ```
 
-#### Vectors
+We can see from the configuration command that we are defining a field lock-status, of type integer that will contain the value of the ptp lock state of the slave.
 
-```diff
-- TODO
-```
-
-#### Variables
-
-```diff
-- TODO
-```
-
-#### Functions
-
-```diff
-- TODO
-```
+To persist and deploy the configuration **commit and-exit** and push the configuration from mgd to Healthbot using **request iceberg deploy**.
 
 #### Triggers
 
-```diff
-- TODO
+Triggers define the system behavior of a Key Performance Indicator. Triggers include a mechanism for defining policies wrt how Healthbot should react when a KPI Threshold Crossing occurs. The syntax of a Trigger allows the user to define terms that can evaluate fields, functions, variables and on match (condition), indicate through color (action) a problem or clearing of a previous problem. As before, we will use the Rule Builder CLI to configure our trigger.
+
+```console
+set iceberg topic external rule ptp-lock-status trigger ptp-lock-status synopsis "Alert if Slave Clock is not Phase Aligned" description "Indicate as Red if the Slave Clock status is Free-run, Initialized, Acquiring or Freq locked"
 ```
 
-#### Rule Properties
+Once the Trigger is defined, we need to create terms to represent the KPI Threshold Crossing behavior.
 
-```diff
-- TODO
+```console
+set iceberg topic external rule ptp-lock-status trigger ptp-lock-status term is-lock-status-valid when equal-to $lock-status 5
+set iceberg topic external rule ptp-lock-status trigger ptp-lock-status term is-lock-status-valid then status color green
 ```
+
+And for the invalid condition
+
+```console
+set iceberg topic external rule ptp-lock-status trigger ptp-lock-status term is-lock-status-invalid when not-equal-to $lock-status 5
+set iceberg topic external rule ptp-lock-status trigger ptp-lock-status term is-lock-status-invalid then status color red
+```
+
+From above, you can see that terms are created for valid and invalid lock status, conditions evaluating on the state value of 5 (Phase Aligned) and actions resulting in the colors either going green (valid) or red (invalid).
 
 ## Playbooks
 
-```diff
-- TODO
+Finally, now that we have defined a Rule, we can associate that Rule with a Playbook. Our Playbook will include a reference to the PTP Rule we created and can therefore be assigned to a Device Group that is interested in PTP monitoring.
+
+```console
+set iceberg playbook ptp-playbook synopsis "Precision Time Protocol (PTP) monitoring" description "Precision Time Protocol (PTP) enable routers and switches to deliver synchronization services" rules external/ptp-lock-status
 ```
+
+As you can see, we have created the Playbook **ptp-playbook** and associated our Rule **ptp-lock-status** in the **external** Topic with it.
+
+![PTP Playbook Instance](assets/rules/ptp-playbook-instance.png)
+
+To confirm our configuration, we can create an instance of the Playbook in the Graphical User Interface and associate it with a Device Group.
+
+![PTP Phase Aligned](assets/rules/ptp-phase-aligned.png)
+
+In the screenshot above you can see the ptp Device Group, for Topic external, KPI ptp-lock-status is showing that the Slave Clock is Phase Aligned with the Master for the Device mx960-1.
