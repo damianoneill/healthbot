@@ -126,11 +126,11 @@ The system clocks can be categorized based on the role of the node in the networ
 
 For this guide we will monitor and act on the **Lock Status**, additional useful metrics are described below:
 
-- [Lock Status](https://www.juniper.net/documentation/en_US/Junos/topics/reference/command-summary/show-ptp-lock-status.html) - shows the lock status of a slave in a PTP network
-- [Clock Class](https://www.juniper.net/documentation/en_US/Junos/topics/reference/configuration-statement/clock-class-edit-protocols-ptp.html) - ESMC quality level
-- [Phase Offset](https://www.juniper.net/documentation/en_US/Junos/topics/reference/command-summary/show-ptp-lock-status.html) - offset information of a slave clock with respect to its master clock
+- [Lock Status](https://www.juniper.net/documentation/en_US/junos/topics/reference/command-summary/show-ptp-lock-status.html) - shows the lock status of a slave in a PTP network
+- [Clock Class](https://www.juniper.net/documentation/en_US/junos/topics/reference/configuration-statement/clock-class-edit-protocols-ptp.html) - ESMC quality level
+- [Phase Offset](https://www.juniper.net/documentation/en_US/junos/topics/reference/command-summary/show-ptp-lock-status.html) - offset information of a slave clock with respect to its master clock
 
-For further information on PTP see [Configuring Precision Time Protocols](https://www.juniper.net/documentation/en_US/Junos/topics/concept/ptp-overview.html).
+For further information on PTP see [Configuring Precision Time Protocols](https://www.juniper.net/documentation/en_US/junos/topics/concept/ptp-overview.html).
 
 ### Components that make up a Rule
 
