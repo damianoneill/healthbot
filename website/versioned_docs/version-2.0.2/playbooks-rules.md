@@ -148,9 +148,9 @@ Depending on the Type selected, additional configuration will be required to com
 
 For our use case, the information that we are interested in is available over the NETCONF interface, so we will use the iAgent Ingest in Healthbot to retrieve the Sensor information.
 
-iAgent (Ingest Agent) uses [PyEZ](https://www.juniper.net/documentation/en_US/Junos-pyez/information-products/pathway-pages/Junos-pyez-developer-guide.html) (Python Microframework) to collect data from Junos Devices. Therefore, we will need to define NETCONF collection criteria to PyEZ for the PTP Attributes that we are interested in. This is done by using the [PyEZ Table and Views](https://www.juniper.net/documentation/en_US/Junos-pyez/topics/concept/Junos-pyez-tables-and-views-overview.html) concepts.
+iAgent (Ingest Agent) uses [PyEZ](https://www.juniper.net/documentation/en_US/junos-pyez/information-products/pathway-pages/junos-pyez-developer-guide.html) (Python Microframework) to collect data from Junos Devices. Therefore, we will need to define NETCONF collection criteria to PyEZ for the PTP Attributes that we are interested in. This is done by using the [PyEZ Table and Views](https://www.juniper.net/documentation/en_US/junos-pyez/topics/concept/junos-pyez-tables-and-views-overview.html) concepts.
 
-> If you plan to create your own rules and use iAgent, it is strongly recommended that you read and work through the [PyEZ Developer Guide](https://www.juniper.net/documentation/en_US/Junos-pyez/information-products/pathway-pages/Junos-pyez-developer-guide.html).
+> If you plan to create your own rules and use iAgent, it is strongly recommended that you read and work through the [PyEZ Developer Guide](https://www.juniper.net/documentation/en_US/junos-pyez/information-products/pathway-pages/junos-pyez-developer-guide.html).
 
 Junos PyEZ Tables and Views enable you to extract operational information and configuration data from devices running Junos OS as well as configure devices running Junos OS. To extract information, you use predefined or custom Tables and Views to map command output or configuration data to a table, which consists of a collection of items that can then be examined as a View.
 
