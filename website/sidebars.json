@@ -6,6 +6,7 @@
       "device-health",
       "playbooks-rules",
       "rest-api",
+      "kafka",
       "glossary"
     ]
   }
