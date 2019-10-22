@@ -1,12 +1,5 @@
 version: "2.4"
 services:
-  chronograf:
-    image: chronograf:latest
-    container_name: chronograf
-    ports:
-      - "8888:8888"
-    environment:
-      INFLUXDB_URL: http://${HEALTHBOT_SERVER}:8086
   zookeeper:
     image: wurstmeister/zookeeper
     container_name: zookeeper
