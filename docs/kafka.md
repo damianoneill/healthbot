@@ -45,13 +45,13 @@ Then you can start your test environment as follows, note you need to specify th
 export KAFKA_OUTSIDE=172.26.138.101
 ```
 
-After defining your environment, startup the containers (kafka, zookeeper) as follows:
+To better understand why you need to define this variable, see this article on [Kafka Listeners](https://rmoff.net/2018/08/02/kafka-listeners-explained/). After defining your environment, startup the containers (kafka, zookeeper) as follows:
 
 ```sh
 docker-compose up
 ```
 
-If this was successful, you should see output similar to below:
+In the future, you may consider running docker-compose up -d which will background the docker containers / logs. If this was successful, you should see output similar to below:
 
 ```sh
 kafka        | waiting for kafka to be ready
@@ -73,7 +73,7 @@ zookeeper    | 2019-10-22 12:48:33,393 [myid:] - INFO  [main:DatadirCleanupManag
 ...
 ```
 
-We can confirm that Kafka started correctly using [nc](https://linux.die.net/man/1/nc) against port 9094 (Kafka OUTSIDE port) on your Kafka demo box.
+We can confirm that Kafka started correctly using [netcat](https://linux.die.net/man/1/nc) against port 9094 (Kafka OUTSIDE port) on your Kafka demo box.
 
 ```sh
 $ nc -vz 172.26.138.101 9094
@@ -101,7 +101,7 @@ Metadata for all topics (from broker 1001: 172.26.138.101:9094/1001):
     partition 0, leader 1001, replicas: 1001, isrs: 1001
 ```
 
-Kafka itself uses Zookeeper to maintain cluster details. Apache Zookeeper is a distributed, open-source configuration, synchronization service along with naming registry for distributed applications like Kakfa. We can use [zk-shell](https://github.com/rgs1/zk_shell) a shell for Zookeeper to query the Kafka broker configuration.
+Kafka itself uses [Zookeeper](https://zookeeper.apache.org/) to maintain cluster details. Apache Zookeeper is a distributed, open-source configuration, synchronization service along with naming registry for distributed applications like Kakfa. We can use [zk-shell](https://github.com/rgs1/zk_shell) a shell for Zookeeper to query the Kafka broker configuration.
 
 ```sh
 $ docker run --rm -it wbowling/zk-shell  172.26.138.101:2181
@@ -112,7 +112,9 @@ Welcome to zk-shell (0.99.05)
 (CONNECTED) />
 ```
 
-We can use [kafkacat](https://github.com/edenhill/kafkacat), a generic non-JVM producer and consumer for Apache Kafka >=0.8, think of it as a netcat for Kafka, to listen to a Topic (as a consumer) as follows:
+This is useful for confirming the outside host / port that will be returned to the Kafka client after a connection is made. As this is regularly a source of misconfiguration in Kafka.
+
+We can use [kafkacat](https://github.com/edenhill/kafkacat), a generic producer and consumer for Apache Kafka >=0.8, think of it as a netcat for Kafka, to listen to a Topic (as a consumer) as follows:
 
 ```sh
 $ docker run -it --network=host edenhill/kafkacat:1.5.0 -b  172.26.138.101:9094 -t test
@@ -146,13 +148,33 @@ At this point go ahead and select Save and Deploy. Assuming everything worked ok
 
 ![Kafka Configuration](assets/kafka/kafka-config-complete.png)
 
+We can confirm the configuration by sending a curl request the the API Gateway on the Healthbot server.
+
+```sh
+$ curl -k -X GET   https://172.26.138.139:8080/api/v1/notifications/   -H 'Accept: */*'   -H 'Accept-Encoding: gzip, deflate'   -H 'Authorization: Basic cm9vdDpCZTFmYXN0'   -H 'Host: 172.26.138.139:8080'
+{
+  "notification": [
+    {
+      "kafka-publish": {
+        "bootstrap-servers": [
+          "172.26.138.101:9094"
+        ]
+      },
+      "notification-name": "ptp-without-topic"
+    }
+  ]
+}
+```
+
+> You will need to update the Authorization token with a value appropriate for you healthbot installation that has been base64 encoded. Alternatively use the Postman configuration from [REST API Guide](rest-api#healthbot-collection).
+
 You may have noted that we named this Notification **ptp-without-topic** and that there was a field available for defining a Kafka Topic to route messages too. By not populating this field Healthbot will produce messages and write them to a Topic name constructed as follows;
 
 ```
 <device-group/network-group>.<device>.<topic>.<rule>.<trigger>
 ```
 
-For e.g. ptp.mx960-1.protocol.ptp.ptp-lock-status.ptp-lock-status, if we wanted the messages to be routed to a preexisting Topic then we could have supplied this in the Topic field above.
+For e.g. ptp.mx960-1.protocol.ptp.ptp-lock-status.ptp-lock-status, if we wanted the messages to be routed to a preexisting Topic then we could have supplied this in the configuration Topic field above.
 
 At this point we have created a configuration within Healthbot for a specific Kafka Cluster / Topic, we now need to associate with a Device Group.
 
@@ -160,7 +182,7 @@ To associate a Kafka connection with a Device Group, navigate to the Dashboard p
 
 ![Device Group](assets/kafka/device-group.png)
 
-This will open a pop-up window as below. At this point you need to associate your Kafka Notification configuration with the Notification settings in this Device Group:
+This will open a pop-up window as below. You need to associate your Kafka Notification configuration with the Notification settings in this Device Group:
 
 ```console
 Send Notifications to the Alarm Manager: enabled
@@ -170,7 +192,11 @@ Normal: ptp-without-topic
 
 ![Kafka Association](assets/kafka/kafka-association.png)
 
-Go ahead and select Save and Deploy. Assuming everything worked, Major and Normal Notifications for this Device Group will be published to the Kafka Cluster we provisioned previously, we can confirm this by triggering a change that results in a Major Alarm and watching for this using kafkacat. For example:
+Go ahead and select Save and Deploy. Assuming everything worked, Major and Normal Notifications for this Device Group will be published to the Kafka Cluster we provisioned previously, we can confirm this by triggering a change that results in a Major Alarm.
+
+![Alarm](assets/kafka/alarm.png)
+
+And watching for this using kafkacat. For example:
 
 ```console
 $ docker run -it --network=host edenhill/kafkacat:1.5.0 -b  172.26.138.101:9094 -t ptp.mx960-1.protocol.ptp.ptp-lock-status.ptp-lock-status
