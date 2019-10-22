@@ -81,10 +81,10 @@
 <p>Then you can start your test environment as follows, note you need to specify the public address of the host where you are running the docker-compose file, I suggest using IP Addresses to ensure no DNS resolution issues.</p>
 <pre><code class="hljs css language-sh"><span class="hljs-built_in">export</span> KAFKA_OUTSIDE=172.26.138.101
 </code></pre>
-<p>After defining your environment, startup the containers (kafka, zookeeper) as follows:</p>
+<p>To better understand why you need to define this variable, see this article on <a href="https://rmoff.net/2018/08/02/kafka-listeners-explained/">Kafka Listeners</a>. After defining your environment, startup the containers (kafka, zookeeper) as follows:</p>
 <pre><code class="hljs css language-sh">docker-compose up
 </code></pre>
-<p>If this was successful, you should see output similar to below:</p>
+<p>In the future, you may consider running docker-compose up -d which will background the docker containers / logs. If this was successful, you should see output similar to below:</p>
 <pre><code class="hljs css language-sh">kafka        | waiting <span class="hljs-keyword">for</span> kafka to be ready
 zookeeper    | ZooKeeper JMX enabled by default
 zookeeper    | Using config: /opt/zookeeper-3.4.13/bin/../conf/zoo.cfg
@@ -103,7 +103,7 @@ zookeeper    | 2019-10-22 12:48:33,393 [myid:] - INFO  [main:DatadirCleanupManag
 zookeeper    | 2019-10-22 12:48:33,393 [myid:] - INFO  [main:DatadirCleanupManager@79] - autopurge.purgeInterval <span class="hljs-built_in">set</span> to 1
 ...
 </code></pre>
-<p>We can confirm that Kafka started correctly using <a href="https://linux.die.net/man/1/nc">nc</a> against port 9094 (Kafka OUTSIDE port) on your Kafka demo box.</p>
+<p>We can confirm that Kafka started correctly using <a href="https://linux.die.net/man/1/nc">netcat</a> against port 9094 (Kafka OUTSIDE port) on your Kafka demo box.</p>
 <pre><code class="hljs css language-sh">$ nc -vz 172.26.138.101 9094
 found 0 associations
 found 1 connections:
@@ -125,7 +125,7 @@ Metadata <span class="hljs-keyword">for</span> all topics (from broker 1001: 172
   topic <span class="hljs-string">"test"</span> with 1 partitions:
     partition 0, leader 1001, replicas: 1001, isrs: 1001
 </code></pre>
-<p>Kafka itself uses Zookeeper to maintain cluster details. Apache Zookeeper is a distributed, open-source configuration, synchronization service along with naming registry for distributed applications like Kakfa. We can use <a href="https://github.com/rgs1/zk_shell">zk-shell</a> a shell for Zookeeper to query the Kafka broker configuration.</p>
+<p>Kafka itself uses <a href="https://zookeeper.apache.org/">Zookeeper</a> to maintain cluster details. Apache Zookeeper is a distributed, open-source configuration, synchronization service along with naming registry for distributed applications like Kakfa. We can use <a href="https://github.com/rgs1/zk_shell">zk-shell</a> a shell for Zookeeper to query the Kafka broker configuration.</p>
 <pre><code class="hljs css language-sh">$ docker run --rm -it wbowling/zk-shell  172.26.138.101:2181
 Welcome to zk-shell (0.99.05)
 (CONNECTING) /&gt;
@@ -133,7 +133,8 @@ Welcome to zk-shell (0.99.05)
 {<span class="hljs-string">"listener_security_protocol_map"</span>:{<span class="hljs-string">"INSIDE"</span>:<span class="hljs-string">"PLAINTEXT"</span>,<span class="hljs-string">"OUTSIDE"</span>:<span class="hljs-string">"PLAINTEXT"</span>},<span class="hljs-string">"endpoints"</span>:[<span class="hljs-string">"INSIDE://356767c09eab:9092"</span>,<span class="hljs-string">"OUTSIDE://172.26.138.101:9094"</span>],<span class="hljs-string">"jmx_port"</span>:-1,<span class="hljs-string">"host"</span>:<span class="hljs-string">"356767c09eab"</span>,<span class="hljs-string">"timestamp"</span>:<span class="hljs-string">"1571748514845"</span>,<span class="hljs-string">"port"</span>:9092,<span class="hljs-string">"version"</span>:4}
 (CONNECTED) /&gt;
 </code></pre>
-<p>We can use <a href="https://github.com/edenhill/kafkacat">kafkacat</a>, a generic non-JVM producer and consumer for Apache Kafka &gt;=0.8, think of it as a netcat for Kafka, to listen to a Topic (as a consumer) as follows:</p>
+<p>This is useful for confirming the outside host / port that will be returned to the Kafka client after a connection is made. As this is regularly a source of misconfiguration in Kafka.</p>
+<p>We can use <a href="https://github.com/edenhill/kafkacat">kafkacat</a>, a generic producer and consumer for Apache Kafka &gt;=0.8, think of it as a netcat for Kafka, to listen to a Topic (as a consumer) as follows:</p>
 <pre><code class="hljs css language-sh">$ docker run -it --network=host edenhill/kafkacat:1.5.0 -b  172.26.138.101:9094 -t <span class="hljs-built_in">test</span>
 % Auto-selecting Consumer mode (use -P or -C to override)
 % Reached end of topic <span class="hljs-built_in">test</span> [0] at offset 0
@@ -154,20 +155,40 @@ Bootstrap Server: 172.26.138.101:9094
 <p><img src="/healthbot/docs/assets/kafka/kafka-config.png" alt="Kafka Configuration"></p>
 <p>At this point go ahead and select Save and Deploy. Assuming everything worked ok you should now see a screen as follows:</p>
 <p><img src="/healthbot/docs/assets/kafka/kafka-config-complete.png" alt="Kafka Configuration"></p>
+<p>We can confirm the configuration by sending a curl request the the API Gateway on the Healthbot server.</p>
+<pre><code class="hljs css language-sh">$ curl -k -X GET   https://172.26.138.139:8080/api/v1/notifications/   -H <span class="hljs-string">'Accept: */*'</span>   -H <span class="hljs-string">'Accept-Encoding: gzip, deflate'</span>   -H <span class="hljs-string">'Authorization: Basic cm9vdDpCZTFmYXN0'</span>   -H <span class="hljs-string">'Host: 172.26.138.139:8080'</span>
+{
+  <span class="hljs-string">"notification"</span>: [
+    {
+      <span class="hljs-string">"kafka-publish"</span>: {
+        <span class="hljs-string">"bootstrap-servers"</span>: [
+          <span class="hljs-string">"172.26.138.101:9094"</span>
+        ]
+      },
+      <span class="hljs-string">"notification-name"</span>: <span class="hljs-string">"ptp-without-topic"</span>
+    }
+  ]
+}
+</code></pre>
+<blockquote>
+<p>You will need to update the Authorization token with a value appropriate for you healthbot installation that has been base64 encoded. Alternatively use the Postman configuration from <a href="rest-api#healthbot-collection">REST API Guide</a>.</p>
+</blockquote>
 <p>You may have noted that we named this Notification <strong>ptp-without-topic</strong> and that there was a field available for defining a Kafka Topic to route messages too. By not populating this field Healthbot will produce messages and write them to a Topic name constructed as follows;</p>
 <pre><code class="hljs"><span class="hljs-tag">&lt;<span class="hljs-name">device-group</span>/<span class="hljs-attr">network-group</span>&gt;</span>.<span class="hljs-tag">&lt;<span class="hljs-name">device</span>&gt;</span>.<span class="hljs-tag">&lt;<span class="hljs-name">topic</span>&gt;</span>.<span class="hljs-tag">&lt;<span class="hljs-name">rule</span>&gt;</span>.<span class="hljs-tag">&lt;<span class="hljs-name">trigger</span>&gt;</span>
 </code></pre>
-<p>For e.g. ptp.mx960-1.protocol.ptp.ptp-lock-status.ptp-lock-status, if we wanted the messages to be routed to a preexisting Topic then we could have supplied this in the Topic field above.</p>
+<p>For e.g. ptp.mx960-1.protocol.ptp.ptp-lock-status.ptp-lock-status, if we wanted the messages to be routed to a preexisting Topic then we could have supplied this in the configuration Topic field above.</p>
 <p>At this point we have created a configuration within Healthbot for a specific Kafka Cluster / Topic, we now need to associate with a Device Group.</p>
 <p>To associate a Kafka connection with a Device Group, navigate to the Dashboard page and select your Device Groups name.</p>
 <p><img src="/healthbot/docs/assets/kafka/device-group.png" alt="Device Group"></p>
-<p>This will open a pop-up window as below. At this point you need to associate your Kafka Notification configuration with the Notification settings in this Device Group:</p>
+<p>This will open a pop-up window as below. You need to associate your Kafka Notification configuration with the Notification settings in this Device Group:</p>
 <pre><code class="hljs css language-console">Send Notifications to the Alarm Manager: enabled
 Major: ptp-without-topic
 Normal: ptp-without-topic
 </code></pre>
 <p><img src="/healthbot/docs/assets/kafka/kafka-association.png" alt="Kafka Association"></p>
-<p>Go ahead and select Save and Deploy. Assuming everything worked, Major and Normal Notifications for this Device Group will be published to the Kafka Cluster we provisioned previously, we can confirm this by triggering a change that results in a Major Alarm and watching for this using kafkacat. For example:</p>
+<p>Go ahead and select Save and Deploy. Assuming everything worked, Major and Normal Notifications for this Device Group will be published to the Kafka Cluster we provisioned previously, we can confirm this by triggering a change that results in a Major Alarm.</p>
+<p><img src="/healthbot/docs/assets/kafka/alarm.png" alt="Alarm"></p>
+<p>And watching for this using kafkacat. For example:</p>
 <pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> docker run -it --network=host edenhill/kafkacat:1.5.0 -b  172.26.138.101:9094 -t ptp.mx960-1.protocol.ptp.ptp-lock-status.ptp-lock-status</span>
 <span class="hljs-meta">%</span><span class="bash"> Auto-selecting Consumer mode (use -P or -C to override)</span>
 {"device-id": "mx960-1", "group": "ptp", "keys": {"_instance_id": "[\"ptp-test\"]", "_playbook_name": "ptp-playbook"}, "message": "Slave Clock is not Phase Aligned with the Master Clock - 2", "rule": "ptp-lock-status", "severity": "major", "topic": "protocol.ptp", "trigger": "ptp-lock-status"}

@@ -292,6 +292,40 @@
         }
       ],
       "protocolProfileBehavior": {}
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Get Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json",
+                "disabled": true
+              },
+              {
+                "key": "Accept",
+                "type": "text",
+                "value": "application/json",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "https://{{server-port}}/api/v1/notifications/",
+              "protocol": "https",
+              "host": ["{{server-port}}"],
+              "path": ["api", "v1", "notifications", ""]
+            },
+            "description": "Retrieve the configuration details of all notifications"
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
     }
   ],
   "auth": {
@@ -329,25 +363,25 @@
   ],
   "variable": [
     {
-      "id": "c7b6d6ee-5223-4019-9e12-22b7f633177e",
+      "id": "854d2d83-becf-42df-bae3-2d2bb0aa49c2",
       "key": "server-port",
       "value": "66.129.235.10:43004",
       "type": "string"
     },
     {
-      "id": "d766f006-2c0a-4782-b271-e41c093272d1",
+      "id": "d7bff7cf-7135-462b-958c-1549a60b3437",
       "key": "username",
       "value": "jcluser",
       "type": "string"
     },
     {
-      "id": "e9c9fa09-f6f2-433a-b1ff-b3e1135e2191",
+      "id": "a31ce59f-70ff-4212-9ae9-850a8972f1c3",
       "key": "password",
       "value": "Juniper!1",
       "type": "string"
     },
     {
-      "id": "469f2bbd-e719-48cc-9f4f-eb5e65b0bdcf",
+      "id": "f39c598d-e61a-4479-92a7-b8943dcbbefc",
       "key": "helper-file",
       "value": "ptp-lock-status.yml",
       "type": "string"
