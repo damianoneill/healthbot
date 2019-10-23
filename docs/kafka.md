@@ -3,7 +3,7 @@ id: kafka
 title: Kafka Integration
 ---
 
-This guide describes how Healthbot can be integrated with [Apache Kafka](https://kafka.apache.org/), is a distributed messaging system providing fast, highly scalable and redundant messaging through a pub-sub model.
+This guide describes how Healthbot can be integrated with [Apache Kafka](https://kafka.apache.org/), a distributed messaging system providing fast, highly scalable and redundant messaging through a pub-sub model.
 
 > Before working through this guide, please ensure you have a good overview of what Kafka is and how it works. A fantastic summary is available in this youtube video - [Apache Kafka Explained](https://www.youtube.com/watch?v=JalUUBKdcA0). Additional information can be found in [Kevin Sookocheff article](https://sookocheff.com/post/kafka/kafka-in-a-nutshell/).
 
@@ -13,7 +13,7 @@ In addition to the Slack and Webhook notification delivery methods, HealthBot pr
 
 ![Kafka Egest](assets/kafka/kafka-egest.png)
 
-To configure Healthbot to publish notifications to Kafka there are a few Kafka concepts that we need to understand.
+To configure Healthbot to publish notifications to Kafka, there are a few Kafka concepts that we need to understand.
 
 ### Kafka overview
 
@@ -23,7 +23,7 @@ The basic architecture of Kafka is organized around a few key terms: topics, pro
 
 - Credit https://blog.parse.ly/post/3886/pykafka-now/
 
-All Kafka messages are organized into **topics**. If you wish to send a message you send it to a specific topic and if you wish to read a message you read it from a specific topic. A consumer pulls messages off of a Kafka topic while **producers** push messages into a Kafka topic. Lastly, Kafka, as a distributed system, runs in a cluster. Each node in the cluster is called a **Kafka broker**.
+All Kafka messages are organized into **topics**. If you wish to send a message you send it to a specific topic and if you wish to read a message you read it from a specific topic. A **consumer** pulls messages off a Kafka topic while **producers** push messages into a Kafka topic. Lastly, Kafka, as a distributed system, runs in a cluster. Each node in the cluster is called a **Kafka broker**.
 
 In the context of Kafka, Healthbot Egest is a **producer**, we will provision the **topic** to push Healthbot Notifications, as well as the Address and Port of the **broker** that will receive the Notifications.
 
@@ -51,7 +51,7 @@ To better understand why you need to define this variable, see this article on [
 docker-compose up
 ```
 
-In the future, you may consider running docker-compose up -d which will background the docker containers / logs. If this was successful, you should see output similar to below:
+In the future, you may consider running **docker-compose up -d** which will background the docker containers / logs. If this was successful, you should see output similar to below:
 
 ```sh
 kafka        | waiting for kafka to be ready
@@ -101,7 +101,7 @@ Metadata for all topics (from broker 1001: 172.26.138.101:9094/1001):
     partition 0, leader 1001, replicas: 1001, isrs: 1001
 ```
 
-Kafka itself uses [Zookeeper](https://zookeeper.apache.org/) to maintain cluster details. Apache Zookeeper is a distributed, open-source configuration, synchronization service along with naming registry for distributed applications like Kakfa. We can use [zk-shell](https://github.com/rgs1/zk_shell) a shell for Zookeeper to query the Kafka broker configuration.
+Kafka itself uses [Apache Zookeeper](https://zookeeper.apache.org/) to maintain cluster details. Zookeeper is a distributed, open-source configuration, synchronization service along with naming registry for distributed applications like Kakfa. We can use [zk-shell](https://github.com/rgs1/zk_shell) a shell for Zookeeper to query the Kafka broker configuration.
 
 ```sh
 $ docker run --rm -it wbowling/zk-shell  172.26.138.101:2181
@@ -137,7 +137,7 @@ This will open a pop-up window as below. At this point you need to provide the f
 ```console
 Name: ptp-without-topic
 Notification Type: kafka
-Bootstrap Server: 172.26.138.101:9094
+Bootstrap Servers: 172.26.138.101:9094
 ```
 
 > Bootstrap Servers is a comma-separated list of host and port pairs that are the addresses of the Kafka brokers in a "bootstrap" Kafka cluster that a Kafka client connects to initially to bootstrap itself.
@@ -148,7 +148,7 @@ At this point go ahead and select Save and Deploy. Assuming everything worked ok
 
 ![Kafka Configuration](assets/kafka/kafka-config-complete.png)
 
-We can confirm the configuration by sending a curl request the the API Gateway on the Healthbot server.
+We can confirm the configuration by sending a curl request to the API Gateway on the Healthbot server.
 
 ```sh
 $ curl -k -X GET   https://172.26.138.139:8080/api/v1/notifications/   -H 'Accept: */*'   -H 'Accept-Encoding: gzip, deflate'   -H 'Authorization: Basic cm9vdDpCZTFmYXN0'   -H 'Host: 172.26.138.139:8080'
@@ -176,7 +176,9 @@ You may have noted that we named this Notification **ptp-without-topic** and tha
 
 For e.g. ptp.mx960-1.protocol.ptp.ptp-lock-status.ptp-lock-status, if we wanted the messages to be routed to a preexisting Topic then we could have supplied this in the configuration Topic field above.
 
-At this point we have created a configuration within Healthbot for a specific Kafka Cluster / Topic, we now need to associate with a Device Group.
+> In Kafka, Topics can be auto-created if they don't exist, Healthbot is leveraging this Kafka capability when no Topic is specified in the Healthbot Kafka Notification configuration, for further information see [Kafka auto.create.topics.enable](https://kafka.apache.org/documentation/#basic_ops_add_topic).
+
+At this point we have created a configuration within Healthbot for a specific Kafka Cluster / Topic, we now need to associate this with a Device Group.
 
 To associate a Kafka connection with a Device Group, navigate to the Dashboard page and select your Device Groups name.
 
