@@ -171,7 +171,7 @@ Bootstrap Server: 172.26.138.101:9094
 }
 </code></pre>
 <blockquote>
-<p>You will need to update the Authorization token with a value appropriate for you healthbot installation that has been base64 encoded. Alternatively use the Postman configuration from <a href="rest-api#healthbot-collection">REST API Guide</a>.</p>
+<p>You will need to update the Authorization token with a value appropriate for your Healthbot installation that has been base64 encoded. You can use an online generator to do this for e.g. <a href="https://www.blitter.se/utils/basic-authentication-header-generator/">Basic Auth Header Generator</a>. Alternatively use the Postman configuration from <a href="rest-api#healthbot-collection">REST API Guide</a>.</p>
 </blockquote>
 <p>You may have noted that we named this Notification <strong>ptp-without-topic</strong> and that there was a field available for defining a Kafka Topic to route messages too. By not populating this field Healthbot will produce messages and write them to a Topic name constructed as follows;</p>
 <pre><code class="hljs"><span class="hljs-tag">&lt;<span class="hljs-name">device-group</span>/<span class="hljs-attr">network-group</span>&gt;</span>.<span class="hljs-tag">&lt;<span class="hljs-name">device</span>&gt;</span>.<span class="hljs-tag">&lt;<span class="hljs-name">topic</span>&gt;</span>.<span class="hljs-tag">&lt;<span class="hljs-name">rule</span>&gt;</span>.<span class="hljs-tag">&lt;<span class="hljs-name">trigger</span>&gt;</span>
