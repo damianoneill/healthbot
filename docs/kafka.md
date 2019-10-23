@@ -166,7 +166,7 @@ $ curl -k -X GET   https://172.26.138.139:8080/api/v1/notifications/   -H 'Accep
 }
 ```
 
-> You will need to update the Authorization token with a value appropriate for you healthbot installation that has been base64 encoded. Alternatively use the Postman configuration from [REST API Guide](rest-api#healthbot-collection).
+> You will need to update the Authorization token with a value appropriate for your Healthbot installation that has been base64 encoded. You can use an online generator to do this for e.g. [Basic Auth Header Generator](https://www.blitter.se/utils/basic-authentication-header-generator/). Alternatively use the Postman configuration from [REST API Guide](rest-api#healthbot-collection).
 
 You may have noted that we named this Notification **ptp-without-topic** and that there was a field available for defining a Kafka Topic to route messages too. By not populating this field Healthbot will produce messages and write them to a Topic name constructed as follows;
 
