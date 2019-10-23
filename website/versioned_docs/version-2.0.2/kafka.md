@@ -217,6 +217,8 @@ And when the clear (Major->Normal) for the Alarm arrives:
 % Reached end of topic ptp.mx960-1.protocol.ptp.ptp-lock-status.ptp-lock-status [0] at offset 5
 ```
 
+> In the upcoming release of Healthbot, 2.1.0, support has been added for streaming both Sensor and Field data to Kafka.
+
 ## Ingest
 
 Kafka Ingest is currently not supported in 2.0.2. Kafka Ingest is in active development and will be available in an upcoming release.
