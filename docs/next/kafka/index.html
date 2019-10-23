@@ -59,7 +59,7 @@
 <p>Before working through this guide, please ensure you have a good overview of what Kafka is and how it works. A fantastic summary is available in this youtube video - <a href="https://www.youtube.com/watch?v=JalUUBKdcA0">Apache Kafka Explained</a>. Additional information can be found in <a href="https://sookocheff.com/post/kafka/kafka-in-a-nutshell/">Kevin Sookocheff article</a>.</p>
 </blockquote>
 <h2><a class="anchor" aria-hidden="true" id="egest"></a><a href="#egest" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Egest</h2>
-<p>In addition to the Slack and Webhook notification delivery methods, HealthBot provides an option to publish notifications to a Kafka cluster. This is the primary focus of this guide.</p>
+<p>In addition to the Slack and Webhook notification delivery methods, HealthBot provides an option to publish notifications to a Kafka deployment. This is the primary focus of this guide.</p>
 <p><img src="/healthbot/docs/assets/kafka/kafka-egest.png" alt="Kafka Egest"></p>
 <p>To configure Healthbot to publish notifications to Kafka, there are a few Kafka concepts that we need to understand.</p>
 <h3><a class="anchor" aria-hidden="true" id="kafka-overview"></a><a href="#kafka-overview" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Kafka overview</h3>
@@ -70,21 +70,21 @@
 </ul>
 <p>All Kafka messages are organized into <strong>topics</strong>. If you wish to send a message you send it to a specific topic and if you wish to read a message you read it from a specific topic. A <strong>consumer</strong> pulls messages off a Kafka topic while <strong>producers</strong> push messages into a Kafka topic. Lastly, Kafka, as a distributed system, runs in a cluster. Each node in the cluster is called a <strong>Kafka broker</strong>.</p>
 <p>In the context of Kafka, Healthbot Egest is a <strong>producer</strong>, we will provision the <strong>topic</strong> to push Healthbot Notifications, as well as the Address and Port of the <strong>broker</strong> that will receive the Notifications.</p>
-<h3><a class="anchor" aria-hidden="true" id="demo-environment"></a><a href="#demo-environment" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Demo Environment</h3>
-<p>To demonstrate Kafka Egest we need a Kafka deployment, for those that don't have an existing deployment, we will use <a href="https://docs.docker.com/compose/">Docker Compose</a> to scaffold one for our purposes. Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration. Instructions are available here for <a href="https://docs.docker.com/compose/install/">installing Docker Compose</a>.</p>
+<h3><a class="anchor" aria-hidden="true" id="demo-environment-kafka-healthbot"></a><a href="#demo-environment-kafka-healthbot" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Demo Environment (Kafka + Healthbot)</h3>
+<p>To demonstrate Kafka Egest we need a Kafka deployment, for those that don't have an existing deployment, we will use <a href="https://docs.docker.com/compose/">Docker Compose</a> to scaffold one for our purposes. Docker Compose is a tool for defining and running multi-container Docker applications. With Docker Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration. Instructions are available here for <a href="https://docs.docker.com/compose/install/">installing Docker Compose</a>.</p>
 <blockquote>
 <p>Ensure that the host you use for running this demo is bi-directionally routable to your host running Healthbot, do <strong>not</strong> run this on your Healthbot host as the out of the box Docker routing will not work correctly.</p>
 </blockquote>
-<p>This guide includes a docker-compose.yml file that can be used to set up your test environment. As a one time step, download this file to your local machine that will host Kafka for e.g. your laptop.</p>
-<pre><code class="hljs css language-sh">wget https://damianoneill.github.io/healthbot/docs/assets/kafka/docker-compose.yml
+<p>This guide includes a docker-compose.yml file that can be used to set up your Kafka deployment. As a one time step, download this file to your local machine that will host Kafka e.g. your laptop.</p>
+<pre><code class="hljs css language-sh">your_kafka_host&gt; wget https://damianoneill.github.io/healthbot/docs/assets/kafka/docker-compose.yml
 </code></pre>
 <p>Then you can start your test environment as follows, note you need to specify the public address of the host where you are running the docker-compose file, I suggest using IP Addresses to ensure no DNS resolution issues.</p>
-<pre><code class="hljs css language-sh"><span class="hljs-built_in">export</span> KAFKA_OUTSIDE=172.26.138.101
+<pre><code class="hljs css language-sh">your_kafka_host&gt; <span class="hljs-built_in">export</span> KAFKA_OUTSIDE=172.26.138.101
 </code></pre>
-<p>To better understand why you need to define this variable, see this article on <a href="https://rmoff.net/2018/08/02/kafka-listeners-explained/">Kafka Listeners</a>. After defining your environment, startup the containers (kafka, zookeeper) as follows:</p>
-<pre><code class="hljs css language-sh">docker-compose up
+<p>To better understand why you need to define this variable, see this article on <a href="https://rmoff.net/2018/08/02/kafka-listeners-explained/">Kafka Listeners</a>. After defining your environment, startup the containers (<strong>kafka</strong>, <strong>zookeeper</strong>) as follows:</p>
+<pre><code class="hljs css language-sh">your_kafka_host&gt;  docker-compose up
 </code></pre>
-<p>In the future, you may consider running <strong>docker-compose up -d</strong> which will background the docker containers / logs. If this was successful, you should see output similar to below:</p>
+<p>In the future, you may consider running <strong>docker-compose up -d</strong> which will run the processes in the background. If this was successful, you should see output similar to below:</p>
 <pre><code class="hljs css language-sh">kafka        | waiting <span class="hljs-keyword">for</span> kafka to be ready
 zookeeper    | ZooKeeper JMX enabled by default
 zookeeper    | Using config: /opt/zookeeper-3.4.13/bin/../conf/zoo.cfg
@@ -104,7 +104,7 @@ zookeeper    | 2019-10-22 12:48:33,393 [myid:] - INFO  [main:DatadirCleanupManag
 ...
 </code></pre>
 <p>We can confirm that Kafka started correctly using <a href="https://linux.die.net/man/1/nc">netcat</a> against port 9094 (Kafka OUTSIDE port) on your Kafka demo box.</p>
-<pre><code class="hljs css language-sh">$ nc -vz 172.26.138.101 9094
+<pre><code class="hljs css language-sh">your_hb_host&gt; nc -vz 172.26.138.101 9094
 found 0 associations
 found 1 connections:
      1: flags=82&lt;CONNECTED,PREFERRED&gt;
@@ -117,7 +117,7 @@ found 1 connections:
 Connection to 172.26.138.101 port 9094 [tcp/*] succeeded!
 </code></pre>
 <p>And that a <strong>test</strong> topic was created as part of the initialisation on startup:</p>
-<pre><code class="hljs css language-sh">$ docker run -it --network=host edenhill/kafkacat:1.5.0 -b  172.26.138.101:9094 -L
+<pre><code class="hljs css language-sh">your_hb_host&gt; docker run -it --network=host edenhill/kafkacat:1.5.0 -b  172.26.138.101:9094 -L
 Metadata <span class="hljs-keyword">for</span> all topics (from broker 1001: 172.26.138.101:9094/1001):
  1 brokers:
   broker 1001 at 172.26.138.101:9094 (controller)
@@ -126,7 +126,7 @@ Metadata <span class="hljs-keyword">for</span> all topics (from broker 1001: 172
     partition 0, leader 1001, replicas: 1001, isrs: 1001
 </code></pre>
 <p>Kafka itself uses <a href="https://zookeeper.apache.org/">Apache Zookeeper</a> to maintain cluster details. Zookeeper is a distributed, open-source configuration, synchronization service along with naming registry for distributed applications like Kakfa. We can use <a href="https://github.com/rgs1/zk_shell">zk-shell</a> a shell for Zookeeper to query the Kafka broker configuration.</p>
-<pre><code class="hljs css language-sh">$ docker run --rm -it wbowling/zk-shell  172.26.138.101:2181
+<pre><code class="hljs css language-sh">your_hb_host&gt; docker run --rm -it wbowling/zk-shell  172.26.138.101:2181
 Welcome to zk-shell (0.99.05)
 (CONNECTING) /&gt;
 (CONNECTED) /&gt; get brokers/ids/1001
@@ -139,7 +139,7 @@ Welcome to zk-shell (0.99.05)
 % Auto-selecting Consumer mode (use -P or -C to override)
 % Reached end of topic <span class="hljs-built_in">test</span> [0] at offset 0
 </code></pre>
-<p>At this point we have a Kafka demo environment running, we can now look at how to provision Healthbot as a Kafka Producer.</p>
+<p>At this point we have a Kafka deployment running and a docker container (edenhill/kafkacat) consuming Kafka messages, we can now look at how to provision Healthbot as a Kafka Producer.</p>
 <h3><a class="anchor" aria-hidden="true" id="healthbot-producer-configuration"></a><a href="#healthbot-producer-configuration" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Healthbot Producer Configuration</h3>
 <p>There are a few steps required to configure Healthbot as a Kafka Producer.</p>
 <p>To configure a Kafka connection, navigate to the Settings page and select + Notification button.</p>
@@ -150,7 +150,7 @@ Notification Type: kafka
 Bootstrap Servers: 172.26.138.101:9094
 </code></pre>
 <blockquote>
-<p>Bootstrap Servers is a comma-separated list of host and port pairs that are the addresses of the Kafka brokers in a &quot;bootstrap&quot; Kafka cluster that a Kafka client connects to initially to bootstrap itself.</p>
+<p>Bootstrap Servers is a comma-separated list of host and port pairs that are the addresses of the Kafka brokers in a &quot;bootstrap&quot; Kafka deployment that a Kafka client connects to initially to bootstrap itself.</p>
 </blockquote>
 <p><img src="/healthbot/docs/assets/kafka/kafka-config.png" alt="Kafka Configuration"></p>
 <p>At this point go ahead and select Save and Deploy. Assuming everything worked ok you should now see a screen as follows:</p>
@@ -171,16 +171,16 @@ Bootstrap Servers: 172.26.138.101:9094
 }
 </code></pre>
 <blockquote>
-<p>You will need to update the Authorization token with a value appropriate for your Healthbot installation that has been base64 encoded. You can use an online generator to do this for e.g. <a href="https://www.blitter.se/utils/basic-authentication-header-generator/">Basic Auth Header Generator</a>. Alternatively use the Postman configuration from <a href="rest-api#healthbot-collection">REST API Guide</a>.</p>
+<p>You will need to update the Authorization token with a value appropriate for your Healthbot installation that has been base64 encoded. You can use an online generator to do this e.g. <a href="https://www.blitter.se/utils/basic-authentication-header-generator/">Basic Auth Header Generator</a>. Alternatively use the Postman configuration from <a href="rest-api#healthbot-collection">REST API Guide</a>.</p>
 </blockquote>
 <p>You may have noted that we named this Notification <strong>ptp-without-topic</strong> and that there was a field available for defining a Kafka Topic to route messages too. By not populating this field Healthbot will produce messages and write them to a Topic name constructed as follows;</p>
 <pre><code class="hljs"><span class="hljs-tag">&lt;<span class="hljs-name">device-group</span>/<span class="hljs-attr">network-group</span>&gt;</span>.<span class="hljs-tag">&lt;<span class="hljs-name">device</span>&gt;</span>.<span class="hljs-tag">&lt;<span class="hljs-name">topic</span>&gt;</span>.<span class="hljs-tag">&lt;<span class="hljs-name">rule</span>&gt;</span>.<span class="hljs-tag">&lt;<span class="hljs-name">trigger</span>&gt;</span>
 </code></pre>
-<p>For e.g. ptp.mx960-1.protocol.ptp.ptp-lock-status.ptp-lock-status, if we wanted the messages to be routed to a preexisting Topic then we could have supplied this in the configuration Topic field above.</p>
+<p>E.g. ptp.mx960-1.protocol.ptp.ptp-lock-status.ptp-lock-status, if we wanted the messages to be routed to a preexisting Topic then we could have supplied this in the configuration Topic field above.</p>
 <blockquote>
 <p>In Kafka, Topics can be auto-created if they don't exist, Healthbot is leveraging this Kafka capability when no Topic is specified in the Healthbot Kafka Notification configuration, for further information see <a href="https://kafka.apache.org/documentation/#basic_ops_add_topic">Kafka auto.create.topics.enable</a>.</p>
 </blockquote>
-<p>At this point we have created a configuration within Healthbot for a specific Kafka Cluster / Topic, we now need to associate this with a Device Group.</p>
+<p>At this point we have created a configuration within Healthbot for a specific Kafka Deployment / Topic, we now need to associate this with a Device Group.</p>
 <p>To associate a Kafka connection with a Device Group, navigate to the Dashboard page and select your Device Groups name.</p>
 <p><img src="/healthbot/docs/assets/kafka/device-group.png" alt="Device Group"></p>
 <p>This will open a pop-up window as below. You need to associate your Kafka Notification configuration with the Notification settings in this Device Group:</p>
@@ -204,7 +204,7 @@ Normal: ptp-without-topic
 </code></pre>
 <h2><a class="anchor" aria-hidden="true" id="ingest"></a><a href="#ingest" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Ingest</h2>
 <p>Kafka Ingest is currently not supported in 2.0.2. Kafka Ingest is in active development and will be available in an upcoming release.</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/healthbot/docs/next/rest-api"><span class="arrow-prev">← </span><span>REST APIs</span></a><a class="docs-next button" href="/healthbot/docs/next/glossary"><span>Glossary</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#egest">Egest</a><ul class="toc-headings"><li><a href="#kafka-overview">Kafka overview</a></li><li><a href="#demo-environment">Demo Environment</a></li><li><a href="#healthbot-producer-configuration">Healthbot Producer Configuration</a></li></ul></li><li><a href="#ingest">Ingest</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"></section><section class="copyright">Copyright © 2019 Damian ONeill</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/healthbot/docs/next/rest-api"><span class="arrow-prev">← </span><span>REST APIs</span></a><a class="docs-next button" href="/healthbot/docs/next/glossary"><span>Glossary</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#egest">Egest</a><ul class="toc-headings"><li><a href="#kafka-overview">Kafka overview</a></li><li><a href="#demo-environment-kafka-healthbot">Demo Environment (Kafka + Healthbot)</a></li><li><a href="#healthbot-producer-configuration">Healthbot Producer Configuration</a></li></ul></li><li><a href="#ingest">Ingest</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"></section><section class="copyright">Copyright © 2019 Damian ONeill</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
                 document.addEventListener('keyup', function(e) {
                   if (e.target !== document.body) {
                     return;
