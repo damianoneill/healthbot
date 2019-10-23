@@ -33,6 +33,18 @@ Time series database are optimized for a fast ingestion rate. It means that such
 
 Further information on the query language can be found at [Influx Query Language](https://docs.influxdata.com/influxdb/v1.7/query_language/)(IFQL).
 
+In guide below, I shall show some sample IFQL queries, you can run these against your own Healthbot Server using the [InfluxDB Client](https://docs.influxdata.com/influxdb/v1.7/tools/shell/).
+
+Connecting to the InfluxDB instance on your Healthbot server using the influx client can be done using Docker to connect to the influx container on Healthbot and running the influx cli tool, as below:
+
+```sh
+$ DOCKER_HOST=ssh://root@172.26.138.139 sh -c 'docker exec -it healthbot_influxdb_1 /bin/bash'
+$ influx
+Connected to http://localhost:8086 version 1.5.2
+InfluxDB shell version: 1.5.2
+>
+```
+
 ### InfluxDB Key Concepts
 
 In this section, we will go through the list of essential terms to know to deal with InfluxDB in 2019.
@@ -48,7 +60,7 @@ In InfluxDB, a database hosts a collection of measurements. However, a single In
 The most common ways to interact with databases are either creating a database or by navigating (use) into a database in order to see collections (you have to be “in a database” in order to query collections, otherwise it won’t work). For e.g. we can navigate into database-1 as follows:
 
 ```sql
-use database-1;
+use ptp:mx960-1;
 ```
 
 Healthbot will create lots of InfluxDB Databases. There will be internal databases used by the various Healthbot processes and there will be databases that represent the telemetry collected from the Device Group:Devices involved in running instances of Playbooks. We will focus this guide on understanding the latter.
@@ -59,13 +71,15 @@ As shown in the diagram above, a database stores multiple measurements. You shou
 
 ![Measurements](assets/tsdb/measurement-1.png)
 
-An example IFQL query for this measurement(cpu_metrics) could be:
+An example IFQL query for this measurement would be:
 
 ```sql
-select * from cpu_metrics where temperature='40';
+select * from "protocol.ptp/ptp-lock-status/ptp-lock-status" limit 5;
 ```
 
-In a SQL world, data are stored in columns, but in InfluxDB we have two other terms : tags & fields.
+> Note the use of inverted commas around the measurement name as the name includes the forward slash and dot characters.
+
+In a SQL world, data is stored in columns, but in InfluxDB we have two other terms: tags & fields.
 
 #### Tags & Fields
 
@@ -77,7 +91,7 @@ In fact, the biggest difference between the two is that tags are indexed and fie
 
 Fields, on the other hand, is literally data. In our past example, the temperature ‘column’ would be a field.
 
-Back to our cpu_metrics example, let’s say that we wanted to add a column named ‘location’ as its name states, defines where the sensor is.
+Back to our protocol.ptp/ptp-lock-status/ptp-lock-status example, let’s say that we wanted to add a column named ‘location’ as its name states, defines where the sensor is.
 
 Should we add it as a tag or a field?
 
@@ -96,8 +110,6 @@ A set of tags is called a “tag-set”. The ‘column name’ of a tag is calle
 Probably the simplest keyword to define. A timestamp in InfluxDB is a date and a time defined in RFC3339 format. When using InfluxDB, it is very common to define your time column as a timestamp in Unix time expressed in nano seconds.
 
 #### Retention policy
-
-This feature of InfluxDB is for me one of the best features there is.
 
 A retention policy defines how long you are going to keep your data. Retention policies are defined per database and of course you can have multiple of them. By default, the retention policy is ‘autogen‘ and will basically keep your data forever. In general, databases have multiple retention policies that are used for different purposes.
 
