@@ -6,6 +6,7 @@
       "version-2.0.2-device-health",
       "version-2.0.2-playbooks-rules",
       "version-2.0.2-rest-api",
+      "version-2.0.2-kafka",
       "version-2.0.2-glossary"
     ]
   }

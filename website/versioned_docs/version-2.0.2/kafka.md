@@ -1,6 +1,7 @@
 ---
-id: kafka
+id: version-2.0.2-kafka
 title: Kafka Integration
+original_id: kafka
 ---
 
 This guide describes how Healthbot can be integrated with [Apache Kafka](https://kafka.apache.org/), a distributed messaging system providing fast, highly scalable and redundant messaging through a pub-sub model.
