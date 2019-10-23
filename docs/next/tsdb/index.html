@@ -1,0 +1,148 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Time Series Databases · Juniper HealthBot</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="This guide describes what a Time Series Database (TSDB) is, the solution adopted by Healthbot and demonstrates a few tools for interacting directly with the TSDB running in your Healthbot deployment."/><meta name="docsearch:version" content="next"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Time Series Databases · Juniper HealthBot"/><meta property="og:type" content="website"/><meta property="og:url" content="https://damianoneill.github.io/healthbot/"/><meta property="og:description" content="This guide describes what a Time Series Database (TSDB) is, the solution adopted by Healthbot and demonstrates a few tools for interacting directly with the TSDB running in your Healthbot deployment."/><meta property="og:image" content="https://damianoneill.github.io/healthbot/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://damianoneill.github.io/healthbot/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/healthbot/img/favicon.ico"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/healthbot/js/scrollSpy.js"></script><link rel="stylesheet" href="/healthbot/css/main.css"/><script src="/healthbot/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/healthbot/"><img class="logo" src="/healthbot/img/favicon.ico" alt="Juniper HealthBot"/><h2 class="headerTitleWithLogo">Juniper HealthBot</h2></a><a href="/healthbot/versions"><h3>next</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/healthbot/docs/next/intro" target="_self">Guides</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search" title="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Guides</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul class=""><li class="navListItem"><a class="navItem" href="/healthbot/docs/next/intro">Overview</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/next/quickstart">Quickstart</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/next/device-health">Device Health</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/next/playbooks-rules">Playbooks and Rules</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/healthbot/docs/next/tsdb">Time Series Databases</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/next/rest-api">REST APIs</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/next/kafka">Kafka Integration</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/next/glossary">Glossary</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Time Series Databases</h1></header><article><div><span><p>This guide describes what a Time Series Database (TSDB) is, the solution adopted by Healthbot and demonstrates a few tools for interacting directly with the TSDB running in your Healthbot deployment.</p>
+<blockquote>
+<p>The initial overview material in the section below, was tailored from this <a href="https://devconnected.com/the-definitive-guide-to-influxdb-in-2019/">web article</a>.</p>
+</blockquote>
+<h2><a class="anchor" aria-hidden="true" id="time-series-databases"></a><a href="#time-series-databases" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Time Series Databases</h2>
+<p>Time Series Databases, as their name state, are database systems specifically designed to handle time-related data.</p>
+<p>Most people will be familiar with relational database such as MySQL or Postgres, these systems are based on the fact that they are modeled using tables. These tables contain columns and rows, each one of them defining an entry in your table. Often, those tables are specifically designed for a purpose: one may be designed to store users, or maintain Device information. Such systems are efficient, scalable and used by companies worldwide for million of requests on their servers.</p>
+<p>Time series databases work differently. Data is still stored in ‘collections’ but these collections share a common denominator: they are aggregated over time. Essentially, it means that for every point that you are able to store, you have a timestamp associated with it.</p>
+<p>But couldn’t we use a relational database and simply have a column named ‘time’? Oracle for example includes a TIMESTAMP data type that we could use for that purpose. You could, but that would be inefficient.</p>
+<p>Time series databases systems are built around the predicate that they need to ingest data in a fast and efficient way.</p>
+<p>Indeed, relational databases do have a fast ingestion rate for most of them, from 20k to 100k rows per second. However, the ingestion is not constant over time. Relational databases have one key aspect that make them slow when data tends to grow: indexes.</p>
+<p>When you add new entries to your relational database, and if your table contains indexes, your database management system will repeatedly re-index your data for it to be accessed in a fast and efficient way. As a consequence, the performance of your DBMS tends to decrease over time. The load is also increasing over time, resulting in having difficulties reading your data.</p>
+<p>Time series database are optimized for a fast ingestion rate. It means that such index systems are optimized to index data that is aggregated over time: as a consequence, the ingestion rate does not decrease over time and stays stable, around 50k to 100k lines per second on a single node.</p>
+<h2><a class="anchor" aria-hidden="true" id="influxdb"></a><a href="#influxdb" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>InfluxDB</h2>
+<p><a href="https://github.com/influxdata/influxdb">InfluxDB</a> is an open-source time series database (TSDB) developed by InfluxData. It is written in Go and optimized for fast, high-availability storage and retrieval of time series data in fields such as operations monitoring, application metrics, Internet of Things sensor data, and real-time analytics.</p>
+<blockquote>
+<p>Before starting, it is important for you to know which version of InfluxDB you are currently using. As of April 2019, InfluxDB comes in two versions : v1.7+ and v2.0. v2.0 is currently in alpha version and puts the Flux language as a centric element of the platform. v1.7 is equipped with InfluxQL language (and Flux if you activate it). As of 2.0.2 Healtbot is based on InfluxDB v1.x</p>
+</blockquote>
+<p>Further information on the query language can be found at <a href="https://docs.influxdata.com/influxdb/v1.7/query_language/">Influx Query Language</a>(IFQL).</p>
+<p>In guide below, I shall show some sample IFQL queries, you can run these against your own Healthbot Server using the <a href="https://docs.influxdata.com/influxdb/v1.7/tools/shell/">InfluxDB Client</a>.</p>
+<p>Connecting to the InfluxDB instance on your Healthbot server using the influx client can be done using Docker to connect to the influx container on Healthbot and running the influx cli tool, as below:</p>
+<pre><code class="hljs css language-sh">$ DOCKER_HOST=ssh://root@172.26.138.139 sh -c <span class="hljs-string">'docker exec -it healthbot_influxdb_1 /bin/bash'</span>
+$ influx
+Connected to http://localhost:8086 version 1.5.2
+InfluxDB shell version: 1.5.2
+&gt;
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="influxdb-key-concepts"></a><a href="#influxdb-key-concepts" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>InfluxDB Key Concepts</h3>
+<p>In this section, we will go through the list of essential terms to know to deal with InfluxDB in 2019.</p>
+<h4><a class="anchor" aria-hidden="true" id="database"></a><a href="#database" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Database</h4>
+<p>A database is a fairly simple concept to understand on its own because you are used to using this term with relational databases. In a SQL environment, a database would host a collection of tables, and even schemas and would represent one instance on its own.</p>
+<p>In InfluxDB, a database hosts a collection of measurements. However, a single InfluxDB instance can host multiple databases. This is a significant differentiation from traditional database systems.</p>
+<p><img src="/healthbot/docs/assets/tsdb/influx-internals.png" alt="Influx Internals"></p>
+<p>The most common ways to interact with databases are either creating a database or by navigating (use) into a database in order to see collections (you have to be “in a database” in order to query collections, otherwise it won’t work). For e.g. we can navigate into database-1 as follows:</p>
+<pre><code class="hljs css language-sql"><span class="hljs-keyword">use</span> ptp:mx960<span class="hljs-number">-1</span>;
+</code></pre>
+<p>Healthbot will create lots of InfluxDB Databases. There will be internal databases used by the various Healthbot processes and there will be databases that represent the telemetry collected from the Device Group:Devices involved in running instances of Playbooks. We will focus this guide on understanding the latter.</p>
+<h4><a class="anchor" aria-hidden="true" id="measurement"></a><a href="#measurement" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Measurement</h4>
+<p>As shown in the diagram above, a database stores multiple measurements. You should think of a measurement as a SQL table. It stores data, and even metadata, over time. Data that is meant to coexist together should be stored in the same measurement.</p>
+<p><img src="/healthbot/docs/assets/tsdb/measurement-1.png" alt="Measurements"></p>
+<p>An example IFQL query for this measurement would be:</p>
+<pre><code class="hljs css language-sql"><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">"protocol.ptp/ptp-lock-status/ptp-lock-status"</span> <span class="hljs-keyword">limit</span> <span class="hljs-number">5</span>;
+</code></pre>
+<blockquote>
+<p>Note the use of inverted commas around the measurement name as the name includes the forward slash and dot characters.</p>
+</blockquote>
+<p>In a SQL world, data is stored in columns, but in InfluxDB we have two other terms: tags &amp; fields.</p>
+<h4><a class="anchor" aria-hidden="true" id="tags-fields"></a><a href="#tags-fields" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Tags &amp; Fields</h4>
+<p>This is a very important topic as it explains the subtle difference between tags &amp; fields.</p>
+<p>When defining a new ‘column’ in InfluxDB, you have the choice to either declare it as a tag or as a field and it makes a very big difference.</p>
+<p>In fact, the biggest difference between the two is that tags are indexed and fields are not. Tags can be seen as metadata defining our data in the measurement. They are hints giving additional information about data, but not data itself.</p>
+<p>Fields, on the other hand, is literally data. In our past example, the temperature ‘column’ would be a field.</p>
+<p>Back to our protocol.ptp/ptp-lock-status/ptp-lock-status example, let’s say that we wanted to add a column named ‘location’ as its name states, defines where the sensor is.</p>
+<p>Should we add it as a tag or a field?</p>
+<p><img src="/healthbot/docs/assets/tsdb/tags-vs-fields.png" alt="Tags vs Fields"></p>
+<p>In this case, it would be added as a tag! We definitely want the location ‘column’ to be indexed and taken into account when performing a query over the location.</p>
+<p>Now that we’ve added the location tag to our measurement, let’s go a bit deeper into the taxonomy.</p>
+<p>A set of tags is called a “tag-set”. The ‘column name’ of a tag is called a “tag key”. Values of a tag are called “tag values”. The same taxonomy repeats for fields.</p>
+<p><img src="/healthbot/docs/assets/tsdb/taxonomy.png" alt="Taxonomy"></p>
+<h4><a class="anchor" aria-hidden="true" id="timestamp"></a><a href="#timestamp" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Timestamp</h4>
+<p>Probably the simplest keyword to define. A timestamp in InfluxDB is a date and a time defined in RFC3339 format. When using InfluxDB, it is very common to define your time column as a timestamp in Unix time expressed in nano seconds.</p>
+<h4><a class="anchor" aria-hidden="true" id="retention-policy"></a><a href="#retention-policy" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Retention policy</h4>
+<p>A retention policy defines how long you are going to keep your data. Retention policies are defined per database and of course you can have multiple of them. By default, the retention policy is ‘autogen‘ and will basically keep your data forever. In general, databases have multiple retention policies that are used for different purposes.</p>
+<p><img src="/healthbot/docs/assets/tsdb/retention-policies-1.png" alt="Retention Policy"></p>
+<p>What is a typical use-case of retention policies?</p>
+<p>If you are using InfluxDB for live monitoring of an entire infrastructure.</p>
+<p>You want to be able to detect when a server goes off for example. In this case, you are interested in data coming from that server currently. You are not interested in keeping the data for several months, as a consequence you want to define a small retention policy: one or two hours for example.</p>
+<h4><a class="anchor" aria-hidden="true" id="point"></a><a href="#point" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Point</h4>
+<p>Finally, an easy one to end this chapter about InfluxDB terms. A point is simply a set of fields that has the same timestamp. In a SQL world, it would be seen as a row or as a unique entry in a table.</p>
+<h2><a class="anchor" aria-hidden="true" id="influxdb-in-healthbot"></a><a href="#influxdb-in-healthbot" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>InfluxDB in Healthbot</h2>
+<p>Now that we have a good understanding of how Telemetry is stored in Healthbot, lets look at how we can query this data.</p>
+<p>...</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/healthbot/docs/next/playbooks-rules"><span class="arrow-prev">← </span><span>Playbooks and Rules</span></a><a class="docs-next button" href="/healthbot/docs/next/rest-api"><span>REST APIs</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#time-series-databases">Time Series Databases</a></li><li><a href="#influxdb">InfluxDB</a><ul class="toc-headings"><li><a href="#influxdb-key-concepts">InfluxDB Key Concepts</a></li></ul></li><li><a href="#influxdb-in-healthbot">InfluxDB in Healthbot</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"></section><section class="copyright">Copyright © 2019 Damian ONeill</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+                document.addEventListener('keyup', function(e) {
+                  if (e.target !== document.body) {
+                    return;
+                  }
+                  // keyCode for '/' (slash)
+                  if (e.keyCode === 191) {
+                    const search = document.getElementById('search_input_react');
+                    search && search.focus();
+                  }
+                });
+              </script><script>
+              var search = docsearch({
+                
+                apiKey: '2e913bb4f70eeb0a94d6bd656899a3c1',
+                indexName: 'juniper_healthbot',
+                inputSelector: '#search_input_react',
+                algoliaOptions: {"facetFilters":["version:2.0.2"]}
+              });
+            </script></body></html>
