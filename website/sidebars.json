@@ -5,6 +5,7 @@
       "quickstart",
       "device-health",
       "playbooks-rules",
+      "tsdb",
       "rest-api",
       "kafka",
       "glossary"
