@@ -8,6 +8,7 @@
       "tsdb",
       "rest-api",
       "kafka",
+      "bulk",
       "glossary"
     ]
   }
