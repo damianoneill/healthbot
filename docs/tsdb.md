@@ -122,3 +122,57 @@ If you are using InfluxDB for live monitoring of an entire infrastructure, you w
 #### Point
 
 Finally, an easy one to end this chapter about InfluxDB terms. A point is simply a set of fields that has the same timestamp. In a SQL world, it would be seen as a row or as a unique entry in a table.
+
+## Chronograph
+
+Chronograf allows you to quickly see the data that you have stored in InfluxDB so you can build robust queries and alerts. It is simple to use and includes templates and libraries to allow you to rapidly build dashboards with real-time visualizations of your data.
+
+We can use a docker image to run a local instance of chronograph and point it towards the influxdb instance running in Healthbot.
+
+```console
+docker run -p 8888:8888 chronograf --influxdb-url=http://hb-server:8086
+```
+
+After starting the image, the docker container exposes the Chronograph web interface at [http://[::]:8888/sources/0/chronograf/data-explorer](http://[::]:8888/sources/0/chronograf/data-explorer) on your local machine. Opening this web page, you'll see a view similar to below.
+
+![Chonograph](assets/tsdb/chronograph.png)
+
+On the top left, select the **Explore** sidebar menu option, this will open a view where the metrics from the **Past 24hrs** are available, at this point select **Add a Query**.
+
+The tool provides a query builder that we demonstrate below.
+
+![Query Builder](assets/tsdb/query-builder.png)
+
+You can see that a query can be constructed by selecting the **DB**, then the **Measurements and Tags**, then **Fields** that you're interested in. In our case;
+
+| DB                        | Measurements & Tags                 | Fields          |
+| ------------------------- | ----------------------------------- | --------------- |
+| ptp:mmx960-1.ptp:mmx960-1 | chassis.power/check-pem-power-usage | pem-power-usage |
+
+Once selected, we can choose from one or more of the inbuilt functions to graph against the values, in the example above the mean and max has been selected. Also note, that the Groupby 1 minute has been selected to aggregate on the 60s retrieval of the data.
+
+The final query generated looks like:
+
+```sql
+SELECT mean("pem-power-usage") AS "mean_pem-power-usage", max("pem-power-usage") AS "max_pem-power-usage" FROM "ptp:mmx960-1"."ptp:mmx960-1"."chassis.power/check-pem-power-usage" WHERE time > :dashboardTime: GROUP BY time(1m) FILL(null)
+```
+
+Resulting in the table above showing values over a 5min window.
+
+At this point we can use the query to create a Dashboard, selecting the **Send to Dashboard** button at the top right of the screen will result in the popup window below.
+
+![Send to Dashboard](assets/tsdb/send-to-dashboard.png)
+
+Create and name a new Dashboard, and cell select the **Send to Dashboard** button highlighted on the popup window.
+
+Now select the **Dashboard** button from the left sidebar menu.
+
+![Dashboards](assets/tsdb/dashboards.png)
+
+And select the Dashboard you created, in our case **Power Usage**. You should see something similar to below.
+
+![Power Usage](assets/tsdb/power-usage.png)
+
+> Since this is running in a docker container, the Dashboard will be lost if the container is destroyed, either mount the container with a local volume or look at a non-docker instance of Chronograph if you wish to persist the dashboards you create.
+
+Further information on Chronograph is available from the [docs site](https://docs.influxdata.com/chronograf/v1.7/).
