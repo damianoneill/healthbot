@@ -145,16 +145,16 @@ The tool provides a query builder that we demonstrate below.
 
 You can see that a query can be constructed by selecting the **DB**, then the **Measurements and Tags**, then **Fields** that you're interested in. In our case;
 
-| DB                        | Measurements & Tags                 | Fields          |
-| ------------------------- | ----------------------------------- | --------------- |
-| ptp:mmx960-1.ptp:mmx960-1 | chassis.power/check-pem-power-usage | pem-power-usage |
+| DB                      | Measurements & Tags                 | Fields          |
+| ----------------------- | ----------------------------------- | --------------- |
+| ptp:mx960-1.ptp:mx960-1 | chassis.power/check-pem-power-usage | pem-power-usage |
 
 Once selected, we can choose from one or more of the inbuilt functions to graph against the values, in the example above the mean and max has been selected. Also note, that the Groupby 1 minute has been selected to aggregate on the 60s retrieval of the data.
 
 The final query generated looks like:
 
 ```sql
-SELECT mean("pem-power-usage") AS "mean_pem-power-usage", max("pem-power-usage") AS "max_pem-power-usage" FROM "ptp:mmx960-1"."ptp:mmx960-1"."chassis.power/check-pem-power-usage" WHERE time > :dashboardTime: GROUP BY time(1m) FILL(null)
+SELECT mean("pem-power-usage") AS "mean_pem-power-usage", max("pem-power-usage") AS "max_pem-power-usage" FROM "ptp:mx960-1"."ptp:mx960-1"."chassis.power/check-pem-power-usage" WHERE time > :dashboardTime: GROUP BY time(1m) FILL(null)
 ```
 
 Resulting in the table above showing values over a 5min window.
