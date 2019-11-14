@@ -55,7 +55,7 @@ Flags:
 Use "h7t [command] --help" for more information about a command.
 ```
 
-> The tool can generate bash completion script, see the completion sub-commands help for instructions.
+> The tool can generate a bash completion script, see the completion sub-commands' help for instructions.
 
 You can see some top-level flags are used to identify the Healthbot installation that you are working against, specifically;
 
@@ -81,7 +81,7 @@ In computing, extract, transform, load (ETL) is the general procedure of copying
 
 Data extraction involves extracting data from homogeneous or heterogeneous sources; data transformation processes data by data cleansing and transforming them into a proper storage format/structure for the purposes of querying and analysis; finally, data loading describes the insertion of data into the final target database.
 
-With h7t, we use the term ETL as it is well understood, in the context of Healthbot a precise definition is described below;
+With h7t, we use the term ETL as it is well understood. In the context of Healthbot a precise definition is described below;
 
 - Extract information from an existing Healthbot installation e.g. extracting the Device configurations and storing them locally in a format that can be used against the same or other Healthbot installations.
 - Transform information in one format for e.g. Device details stored in a CSV file into a format that can be consumed by this tool.
@@ -93,7 +93,7 @@ The key objective with the tool is to minimize the laborious configuration requi
 
 To solidify your understanding of the tool, I will demonstrate a use case below.
 
-A Healthbot users has an Excel spreadsheet containing a list of Devices; their management IP address and username and passwords for connecting to them.
+A Healthbot users has an Excel spreadsheet containing a list of Devices; their management IP address, username and passwords for connecting to them.
 
 ![excel devices](assets/bulk/devices.png)
 
@@ -101,7 +101,7 @@ We can export this spreadsheet into a CSV file and use this as input to the tool
 
 ![excel devices csv](assets/bulk/devices-csv.png)
 
-The file will be in text format and will look like the following;
+The [file](assets/devices.csv) will be in text format and will look like the following;
 
 ```console
 $ cat devices.csv
@@ -149,7 +149,7 @@ You can see from the output above that transform is a parent command and that it
 By default, the CSV plugin (sample plugin that is shipped as a separate binary with the tool) will be used. This plugin needs to be stored in a plugins directory relative to where the h7t binary has been saved.
 
 ```console
-$ h7t transform devices -i ./customer-devices/ -o ./healthbot-devices/
+$ ./h7t transform devices -i ./customer-devices/ -o ./healthbot-devices/
 Using config file: /Users/doneill/.h7t.yaml
 Plugin: csv
 Wrote 3 Things to ./healthbot-devices//devices.yml
@@ -203,7 +203,7 @@ The load command also provides sub-commands for
 
 More information on these are available in the [docs folder](https://github.com/damianoneill/h7t/blob/master/docs/h7t_load.md).
 
-### Other notable commands
+## Other notable commands
 
 There are a few other commands that are worth pointing out.
 
