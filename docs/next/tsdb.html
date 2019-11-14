@@ -122,7 +122,42 @@ InfluxDB shell version: 1.5.2
 <p>If you are using InfluxDB for live monitoring of an entire infrastructure, you want to be able to detect when a server goes off, for example. In this case, you are interested in data coming from that server currently. You are not interested in keeping the data for several months, as a consequence you want to define a small retention policy: one or two hours.</p>
 <h4><a class="anchor" aria-hidden="true" id="point"></a><a href="#point" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Point</h4>
 <p>Finally, an easy one to end this chapter about InfluxDB terms. A point is simply a set of fields that has the same timestamp. In a SQL world, it would be seen as a row or as a unique entry in a table.</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/healthbot/docs/next/playbooks-rules"><span class="arrow-prev">← </span><span>Playbooks and Rules</span></a><a class="docs-next button" href="/healthbot/docs/next/rest-api"><span>REST APIs</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#time-series-databases">Time Series Databases</a></li><li><a href="#influxdb">InfluxDB</a><ul class="toc-headings"><li><a href="#influxdb-key-concepts">InfluxDB Key Concepts</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"></section><section class="copyright">Copyright © 2019 Damian ONeill</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+<h2><a class="anchor" aria-hidden="true" id="chronograph"></a><a href="#chronograph" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Chronograph</h2>
+<p>Chronograf allows you to quickly see the data that you have stored in InfluxDB so you can build robust queries and alerts. It is simple to use and includes templates and libraries to allow you to rapidly build dashboards with real-time visualizations of your data.</p>
+<p>We can use a docker image to run a local instance of chronograph and point it towards the influxdb instance running in Healthbot.</p>
+<pre><code class="hljs css language-console">docker run -p 8888:8888 chronograf --influxdb-url=http://hb-server:8086
+</code></pre>
+<p>After starting the image, the docker container exposes the Chronograph web interface at <a href="http://[::]:8888/sources/0/chronograf/data-explorer">http://[::]:8888/sources/0/chronograf/data-explorer</a> on your local machine. Opening this web page, you'll see a view similar to below.</p>
+<p><img src="/healthbot/docs/assets/tsdb/chronograph.png" alt="Chonograph"></p>
+<p>On the top left, select the <strong>Explore</strong> sidebar menu option, this will open a view where the metrics from the <strong>Past 24hrs</strong> are available, at this point select <strong>Add a Query</strong>.</p>
+<p>The tool provides a query builder that we demonstrate below.</p>
+<p><img src="/healthbot/docs/assets/tsdb/query-builder.png" alt="Query Builder"></p>
+<p>You can see that a query can be constructed by selecting the <strong>DB</strong>, then the <strong>Measurements and Tags</strong>, then <strong>Fields</strong> that you're interested in. In our case;</p>
+<table>
+<thead>
+<tr><th>DB</th><th>Measurements &amp; Tags</th><th>Fields</th></tr>
+</thead>
+<tbody>
+<tr><td>ptp:mmx960-1.ptp:mmx960-1</td><td>chassis.power/check-pem-power-usage</td><td>pem-power-usage</td></tr>
+</tbody>
+</table>
+<p>Once selected, we can choose from one or more of the inbuilt functions to graph against the values, in the example above the mean and max has been selected. Also note, that the Groupby 1 minute has been selected to aggregate on the 60s retrieval of the data.</p>
+<p>The final query generated looks like:</p>
+<pre><code class="hljs css language-sql"><span class="hljs-keyword">SELECT</span> mean(<span class="hljs-string">"pem-power-usage"</span>) <span class="hljs-keyword">AS</span> <span class="hljs-string">"mean_pem-power-usage"</span>, <span class="hljs-keyword">max</span>(<span class="hljs-string">"pem-power-usage"</span>) <span class="hljs-keyword">AS</span> <span class="hljs-string">"max_pem-power-usage"</span> <span class="hljs-keyword">FROM</span> <span class="hljs-string">"ptp:mmx960-1"</span>.<span class="hljs-string">"ptp:mmx960-1"</span>.<span class="hljs-string">"chassis.power/check-pem-power-usage"</span> <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">time</span> &gt; :dashboardTime: <span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> <span class="hljs-built_in">time</span>(<span class="hljs-number">1</span>m) FILL(<span class="hljs-literal">null</span>)
+</code></pre>
+<p>Resulting in the table above showing values over a 5min window.</p>
+<p>At this point we can use the query to create a Dashboard, selecting the <strong>Send to Dashboard</strong> button at the top right of the screen will result in the popup window below.</p>
+<p><img src="/healthbot/docs/assets/tsdb/send-to-dashboard.png" alt="Send to Dashboard"></p>
+<p>Create and name a new Dashboard, and cell select the <strong>Send to Dashboard</strong> button highlighted on the popup window.</p>
+<p>Now select the <strong>Dashboard</strong> button from the left sidebar menu.</p>
+<p><img src="/healthbot/docs/assets/tsdb/dashboards.png" alt="Dashboards"></p>
+<p>And select the Dashboard you created, in our case <strong>Power Usage</strong>. You should see something similar to below.</p>
+<p><img src="/healthbot/docs/assets/tsdb/power-usage.png" alt="Power Usage"></p>
+<blockquote>
+<p>Since this is running in a docker container, the Dashboard will be lost if the container is destroyed, either mount the container with a local volume or look at a non-docker instance of Chronograph if you wish to persist the dashboards you create.</p>
+</blockquote>
+<p>Further information on Chronograph is available from the <a href="https://docs.influxdata.com/chronograf/v1.7/">docs site</a>.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/healthbot/docs/next/playbooks-rules"><span class="arrow-prev">← </span><span>Playbooks and Rules</span></a><a class="docs-next button" href="/healthbot/docs/next/rest-api"><span>REST APIs</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#time-series-databases">Time Series Databases</a></li><li><a href="#influxdb">InfluxDB</a><ul class="toc-headings"><li><a href="#influxdb-key-concepts">InfluxDB Key Concepts</a></li></ul></li><li><a href="#chronograph">Chronograph</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"></section><section class="copyright">Copyright © 2019 Damian ONeill</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
                 document.addEventListener('keyup', function(e) {
                   if (e.target !== document.body) {
                     return;
