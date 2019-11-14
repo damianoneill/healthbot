@@ -238,6 +238,7 @@ No of Device Groups: 1
   dg1                       2
 
 </code></pre>
+<p>This summarises an installation, providing a high level view of what has been configured.</p>
 <p>The configure command provides a Devices sub-command for provisioning Devices using NETCONF RPC Requests. This can be used to bulk provision configuration directly on the Devices, e.g. configuring the entablement of gRPC for Telemetry.</p>
 <pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> cat grpc.rpc</span>
 &lt;edit-config&gt;
@@ -261,6 +262,37 @@ No of Device Groups: 1
 &lt;/edit-config&gt;
 <span class="hljs-meta">
 $</span><span class="bash"> h7t configure devices -i ./healthbot-devices/ -f grpc.rpc</span>
+</code></pre>
+<p>An alternative to provisioning devices is to pass an RPC that retrieves information e.g. h7t includes a verbose flag (-v) that can be used to see the REST requests that are generated to the healthbot installation or in the case of the <strong>configure devices</strong> sub-command see the payload that was sent on the rpc response.</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> cat get-configuration.rpc</span>
+&lt;get-configuration&gt;
+  &lt;configuration&gt;
+    &lt;system&gt;
+      &lt;login/&gt;
+    &lt;/system&gt;
+  &lt;/configuration&gt;
+&lt;/get-configuration&gt;
+<span class="hljs-meta">
+$</span><span class="bash">  h7t configure devices -i ./healthbot-devices/ -f get-configuration.rpc -v</span>
+
+Using config file: /Users/doneill/.h7t.yaml
+rpc response:
+&lt;configuration xmlns="http://xml.juniper.net/xnm/1.1/xnm" junos:changed-seconds="1573485909" junos:changed-localtime="2019-11-11 15:25:09 UTC"&gt;
+    &lt;system&gt;
+        &lt;login&gt;
+            &lt;user&gt;
+                &lt;name&gt;regress&lt;/name&gt;
+                &lt;uid&gt;2000&lt;/uid&gt;
+                &lt;class&gt;super-user&lt;/class&gt;
+                &lt;authentication&gt;
+                    &lt;encrypted-password&gt;$6$5bDOf1ds$HZK23qJdt86fXH22S64rfzEHkbH.BwxnyD0BCBZCuZOjOivmTWP0GkdgB/sfLHoMcWLbp0Uhw7KE2mgmbT4ug1&lt;/encrypted-password&gt;
+                &lt;/authentication&gt;
+            &lt;/user&gt;
+        &lt;/login&gt;
+    &lt;/system&gt;
+&lt;/configuration&gt;
+
+...
 </code></pre>
 <p>Finally, all load commands take a -e option to erase rather than create the Things defined in the configuration files. E.g. to delete the Devices provisioned in Healthbot above, you could run the following:</p>
 <pre><code class="hljs css language-console">h7t load devices -i ./healthbot-devices/ -e
