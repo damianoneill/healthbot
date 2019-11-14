@@ -230,6 +230,8 @@ No of Device Groups: 1
 
 ```
 
+This summarises an installation, providing a high level view of what has been configured.
+
 The configure command provides a Devices sub-command for provisioning Devices using NETCONF RPC Requests. This can be used to bulk provision configuration directly on the Devices, e.g. configuring the entablement of gRPC for Telemetry.
 
 ```console
@@ -255,6 +257,40 @@ $ cat grpc.rpc
 </edit-config>
 
 $ h7t configure devices -i ./healthbot-devices/ -f grpc.rpc
+```
+
+An alternative to provisioning devices is to pass an RPC that retrieves information e.g. h7t includes a verbose flag (-v) that can be used to see the REST requests that are generated to the healthbot installation or in the case of the **configure devices** sub-command see the payload that was sent on the rpc response.
+
+```console
+$ cat get-configuration.rpc
+<get-configuration>
+  <configuration>
+    <system>
+      <login/>
+    </system>
+  </configuration>
+</get-configuration>
+
+$  h7t configure devices -i ./healthbot-devices/ -f get-configuration.rpc -v
+
+Using config file: /Users/doneill/.h7t.yaml
+rpc response:
+<configuration xmlns="http://xml.juniper.net/xnm/1.1/xnm" junos:changed-seconds="1573485909" junos:changed-localtime="2019-11-11 15:25:09 UTC">
+    <system>
+        <login>
+            <user>
+                <name>regress</name>
+                <uid>2000</uid>
+                <class>super-user</class>
+                <authentication>
+                    <encrypted-password>$6$5bDOf1ds$HZK23qJdt86fXH22S64rfzEHkbH.BwxnyD0BCBZCuZOjOivmTWP0GkdgB/sfLHoMcWLbp0Uhw7KE2mgmbT4ug1</encrypted-password>
+                </authentication>
+            </user>
+        </login>
+    </system>
+</configuration>
+
+...
 ```
 
 Finally, all load commands take a -e option to erase rather than create the Things defined in the configuration files. E.g. to delete the Devices provisioned in Healthbot above, you could run the following:
