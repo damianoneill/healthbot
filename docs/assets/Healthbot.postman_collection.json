@@ -36,6 +36,37 @@
             "description": "Retrieve high level information about the Devices registered with this Healthbot Server"
           },
           "response": []
+        },
+        {
+          "name": "Create or Update Device",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "type": "text",
+                "value": "application/json",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n      \"authentication\": {\n        \"password\": {\n          \"password\": \"$9$.mQ3EhrvMX0BIcrlLXGDjkfT369\",\n          \"username\": \"doneill\"\n        }\n      },\n      \"device-id\": \"{{device-id}}\",\n      \"host\": \"172.30.177.102\"\n}"
+            },
+            "url": {
+              "raw": "https://{{server-port}}/api/v1/device/{{device-id}}/",
+              "protocol": "https",
+              "host": ["{{server-port}}"],
+              "path": ["api", "v1", "device", "{{device-id}}", ""]
+            },
+            "description": "Retrieve high level information about the Devices registered with this Healthbot Server"
+          },
+          "response": []
         }
       ],
       "protocolProfileBehavior": {}
@@ -363,27 +394,33 @@
   ],
   "variable": [
     {
-      "id": "854d2d83-becf-42df-bae3-2d2bb0aa49c2",
+      "id": "c1ac2cae-155e-46ed-bfed-87466379ad34",
       "key": "server-port",
       "value": "66.129.235.10:43004",
       "type": "string"
     },
     {
-      "id": "d7bff7cf-7135-462b-958c-1549a60b3437",
+      "id": "0d424fbd-23eb-4ec8-958f-14d11094b992",
       "key": "username",
       "value": "jcluser",
       "type": "string"
     },
     {
-      "id": "a31ce59f-70ff-4212-9ae9-850a8972f1c3",
+      "id": "6fed49ed-80f5-4b07-8668-e283ae889739",
       "key": "password",
       "value": "Juniper!1",
       "type": "string"
     },
     {
-      "id": "f39c598d-e61a-4479-92a7-b8943dcbbefc",
+      "id": "ba6f8f2e-d05b-4306-95fe-aa4bb5244217",
       "key": "helper-file",
       "value": "ptp-lock-status.yml",
+      "type": "string"
+    },
+    {
+      "id": "16e1c21b-07a5-4ab4-b618-ab7877cdfb00",
+      "key": "device-id",
+      "value": "test_device_id",
       "type": "string"
     }
   ],
