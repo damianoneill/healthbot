@@ -8,6 +8,7 @@
       "version-2.0.2-tsdb",
       "version-2.0.2-rest-api",
       "version-2.0.2-kafka",
+      "version-2.0.2-bulk",
       "version-2.0.2-glossary"
     ]
   }
