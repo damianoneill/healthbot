@@ -1,0 +1,320 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Bulk Provisioning · Juniper HealthBot</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="This guide describes using a tool to Bulk Provision a Healthbot Installation. The tools aim is to simplify the initial setup of a Healthbot installation by minimising the repetitive tasks when onboarding Devices or aggregating Devices into Groups."/><meta name="docsearch:version" content="2.0.2"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Bulk Provisioning · Juniper HealthBot"/><meta property="og:type" content="website"/><meta property="og:url" content="https://damianoneill.github.io/healthbot/"/><meta property="og:description" content="This guide describes using a tool to Bulk Provision a Healthbot Installation. The tools aim is to simplify the initial setup of a Healthbot installation by minimising the repetitive tasks when onboarding Devices or aggregating Devices into Groups."/><meta property="og:image" content="https://damianoneill.github.io/healthbot/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://damianoneill.github.io/healthbot/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/healthbot/img/favicon.ico"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/healthbot/js/scrollSpy.js"></script><link rel="stylesheet" href="/healthbot/css/main.css"/><script src="/healthbot/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/healthbot/"><img class="logo" src="/healthbot/img/favicon.ico" alt="Juniper HealthBot"/><h2 class="headerTitleWithLogo">Juniper HealthBot</h2></a><a href="/healthbot/versions"><h3>2.0.2</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/healthbot/docs/intro" target="_self">Guides</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search" title="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Guides</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul class=""><li class="navListItem"><a class="navItem" href="/healthbot/docs/intro">Overview</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/quickstart">Quickstart</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/device-health">Device Health</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/playbooks-rules">Playbooks and Rules</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/tsdb">Time Series Databases</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/rest-api">REST APIs</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/kafka">Kafka Integration</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/healthbot/docs/bulk">Bulk Provisioning</a></li><li class="navListItem"><a class="navItem" href="/healthbot/docs/glossary">Glossary</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Bulk Provisioning</h1></header><article><div><span><p>This guide describes using a tool to Bulk Provision a Healthbot Installation. The tools aim is to simplify the initial setup of a Healthbot installation by minimising the repetitive tasks when onboarding Devices or aggregating Devices into Groups.</p>
+<h2><a class="anchor" aria-hidden="true" id="h7t"></a><a href="#h7t" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>h7t</h2>
+<p>h7t is a command-line tool publicly available at this Github repository <a href="https://github.com/damianoneill/h7t">https://github.com/damianoneill/h7t</a>. The tool has releases for Windows, OSX or Linux x86 64bit binaries. It is versioned, the latest version can be downloaded from the <a href="https://github.com/damianoneill/h7t/releases/latest">releases</a> page. Expand the tar.gz into a directory where you want to store the command-line tool.</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> tree .</span>
+.
+├── LICENSE
+├── README.md
+├── h7t
+└── plugins
+    └── csv
+        └── transformer
+
+2 directories, 4 files
+</code></pre>
+<p>The tool is self-documenting, the commands (and sub-commands) description and options can be viewed by passing the help (-h) flag.</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> h7t -h</span>
+A tool for interacting with Healthbot over the REST API.
+
+The intent with this tool is to provide bulk or aggregate functions, that simplifies interacting with Healthbot.
+
+Usage:
+  h7t [command]
+
+Available Commands:
+  completion  Generate shell completion script for h7t
+  configure   Configure information relating to a Healthbot Installation
+  docs        Generate Markdown for the commands in h7t
+  extract     Extract information from a Healthbot Installation
+  help        Help about any command
+  load        Load information into a Healthbot Installation
+  summarise   Summarise information from a Healthbot Installation
+  transform   Transform things from proprietary formats into Healthbot dsl format
+  version     Output the current build information
+
+Flags:
+  -a, --authority string   healthbot HTTPS Authority (default "localhost:8080")
+      --config string      config file (default is $HOME/.h7t.yaml)
+  -h, --help               help for h7t
+  -p, --password string    healthbot Password (default "****")
+  -u, --username string    healthbot Username (default "admin")
+  -v, --verbose            cause h7t to be more verbose
+
+Use "h7t [command] --help" for more information about a command.
+</code></pre>
+<blockquote>
+<p>The tool can generate a bash completion script, see the completion sub-commands' help for instructions.</p>
+</blockquote>
+<p>You can see some top-level flags are used to identify the Healthbot installation that you are working against, specifically;</p>
+<ul>
+<li>authority, the hostname and port of the healthbot server</li>
+<li>username, used to login to healthbot</li>
+<li>password, used for the login</li>
+</ul>
+<p>To minimise the amount of typing required with the tool, a configuration can be defined for these values as follows;</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> cat ~/.h7t.yaml</span>
+---
+authority: "my-hb-server:8080"
+username: root
+password: ardma73x~-;
+</code></pre>
+<p>This will be used unless values are overridden directly on the command line.</p>
+<h2><a class="anchor" aria-hidden="true" id="extract-transform-load-etl"></a><a href="#extract-transform-load-etl" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Extract Transform Load (ETL)</h2>
+<p>In computing, extract, transform, load (ETL) is the general procedure of copying data from one or more sources into a destination system which represents the data differently from the source(s) or in a different context than the source(s).</p>
+<p>Data extraction involves extracting data from homogeneous or heterogeneous sources; data transformation processes data by data cleansing and transforming them into a proper storage format/structure for the purposes of querying and analysis; finally, data loading describes the insertion of data into the final target database.</p>
+<p>With h7t, we use the term ETL as it is well understood. In the context of Healthbot a precise definition is described below;</p>
+<ul>
+<li>Extract information from an existing Healthbot installation e.g. extracting the Device configurations and storing them locally in a format that can be used against the same or other Healthbot installations.</li>
+<li>Transform information in one format for e.g. Device details stored in a CSV file into a format that can be consumed by this tool.</li>
+<li>Load configuration from files e.g. a set of Device Group definitions and apply these against a Healthbot installation.</li>
+</ul>
+<p>The key objective with the tool is to minimize the laborious configuration required in large networks. Other uses cases exist; e.g. cloning the production deployment into a lab system for regression testing of new releases, staging system setup for new configurations or loads, etc.</p>
+<h2><a class="anchor" aria-hidden="true" id="sample-scenario"></a><a href="#sample-scenario" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Sample Scenario</h2>
+<p>To solidify your understanding of the tool, I will demonstrate a use case below.</p>
+<p>A Healthbot users has an Excel spreadsheet containing a list of Devices; their management IP address, username and passwords for connecting to them.</p>
+<p><img src="/healthbot/docs/assets/bulk/devices.png" alt="excel devices"></p>
+<p>We can export this spreadsheet into a CSV file and use this as input to the tool to generate a configuration for provisioning this set of Devices within a Healthbot installation.</p>
+<p><img src="/healthbot/docs/assets/bulk/devices-csv.png" alt="excel devices csv"></p>
+<p>The <a href="/healthbot/docs/assets/devices.csv">file</a> will be in text format and will look like the following;</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> cat devices.csv</span>
+device-id,host,username,password
+mx1,10.0.0.1,root,caQ5B+CW?AZ@hs.2
+mx2,10.0.0.2,root,cC#8a:K&gt;R&lt;9j;KCY
+mx3,10.0.0.3,admin,YckA))5)*}v&lt;H9Z\
+</code></pre>
+<p>At this point, there is no way for Healthbot to consume this information, we need to transform this into a format that can be sent to an installation. We do this using the transform sub-command within h7t.</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> h7t transform -h</span>
+Transform customer content into dsl things e.g. devices.
+
+Transform sub-commands work by iterating over all files in the input directory
+
+Usage:
+  h7t transform [flags]
+  h7t transform [command]
+
+Available Commands:
+  devices     Transform Devices configuration
+
+Flags:
+  -h, --help                      help for transform
+  -i, --input_directory string    directory where the configuration will be loaded from (default ".")
+  -o, --output_directory string   directory where the configuration will be written to (default ".")
+      --plugin string             name of the plugin to be used (default "csv")
+
+Global Flags:
+  -a, --authority string   healthbot HTTPS Authority (default "localhost:8080")
+      --config string      config file (default is $HOME/.h7t.yaml)
+  -p, --password string    healthbot Password (default "****")
+  -u, --username string    healthbot Username (default "admin")
+  -v, --verbose            cause h7t to be more verbose
+
+Use "h7t transform [command] --help" for more information about a command.
+</code></pre>
+<p>You can see from the output above that transform is a parent command and that it contains a sub-command devices.</p>
+<blockquote>
+<p>It is assumed that customers' data may exist in multiple formats, therefore; transform devices is implemented using a plugin technology that allows developers to create plugins for h7t for implementing custom transform logic. Further information on this is available on the <a href="https://github.com/damianoneill/h7t/tree/master/plugins">transform readme</a>.</p>
+</blockquote>
+<p>By default, the CSV plugin (sample plugin that is shipped as a separate binary with the tool) will be used. This plugin needs to be stored in a plugins directory relative to where the h7t binary has been saved.</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> ./h7t transform devices -i ./customer-devices/ -o ./healthbot-devices/</span>
+Using config file: /Users/doneill/.h7t.yaml
+Plugin: csv
+Wrote 3 Things to ./healthbot-devices//devices.yml
+</code></pre>
+<blockquote>
+<p>To simplify the invocation of the tool, all commands that use configuration files (except configure devices) take a directory as arguments, the tool will attempt to load all files within the directory, allowing users to partition how they store configuration in a manner that suits their business needs.</p>
+</blockquote>
+<p>Running this command will generate a YAML file. This file can be used (for example) as input to the tool for provisioning Devices within Healthbot.</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> cat ./healthbot-devices/devices.yml</span>
+device:
+- device-id: mx1
+  host: 10.0.0.1
+  authentication:
+    password:
+      username: root
+      password: caQ5B+CW?AZ@hs.2
+- device-id: mx2
+  host: 10.0.0.2
+  authentication:
+    password:
+      username: root
+      password: cC#8a:K&gt;R&lt;9j;KCY
+- device-id: mx3
+  host: 10.0.0.3
+  authentication:
+    password:
+      username: admin
+      password: YckA))5)*}v&lt;H9Z\
+</code></pre>
+<p>The format of the YAML file is dictated by the format of the JSON payloads used in the REST requests that can be sent to the Healthbot installation. Examples of the various REST requests are covered in the <a href="rest-api#first-request">REST API</a> Guide. YAML was chosen as the default configuration as it is more easily read by humans than JSON. The tool will automatically convert between YAML and JSON, however, JSON payloads can be used as input if preferred. A complete YAML example of the options in the Devices configuration is available in the <a href="https://github.com/damianoneill/h7t/tree/master/dsl/testdata">testdata folder</a>.</p>
+<p>At this point, we have a valid Devices configuration that can be used against a Healthbot installation to bulk provision the Devices. To do this, we run the load command.</p>
+<pre><code class="hljs css language-console">12:26 $ h7t load devices -i ./healthbot-devices/
+Using config file: /Users/doneill/.h7t.yaml
+Updated 3 Things from healthbot-devices/devices.yml to my-hb-server:8080
+</code></pre>
+<p>We can use the <a href="rest-api#postman">Postman Request</a> (Get all Devices) to confirm that this was successful.</p>
+<p><img src="/healthbot/docs/assets/bulk/postman.png" alt="postman"></p>
+<p>The load command also provides sub-commands for</p>
+<ul>
+<li>Device Groups</li>
+<li>Helper Files</li>
+</ul>
+<p>More information on these are available in the <a href="https://github.com/damianoneill/h7t/blob/master/docs/h7t_load.md">docs folder</a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="other-notable-commands"></a><a href="#other-notable-commands" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Other notable commands</h2>
+<p>There are a few other commands that are worth pointing out.</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> h7t summarise installation</span>
+Using config file: /Users/doneill/.h7t.yaml
+
+Healthbot Authority: podrunner:8080
+Healthbot Version: HealthBot 2.1.0-beta
+Healthbot Time: 2019-11-14T12:38:35Z
+
+No of Managed Devices: 3
+
+  Device Id  Platform  Release  Serial Number
+
+  mx1       MX240     18.1      JN1261DB3AFC
+  mx2       MX480     18.4R2.7  JN1264DB3AFD
+  mx3       MX240     18.4R2.7  JN1364DB3BFA
+
+No of Device Groups: 1
+
+  Device Group  No of Devices
+  dg1                       2
+
+</code></pre>
+<p>This summarises an installation, providing a high level view of what has been configured.</p>
+<p>The configure command provides a Devices sub-command for provisioning Devices using NETCONF RPC Requests. This can be used to bulk provision configuration directly on the Devices, e.g. configuring the entablement of gRPC for Telemetry.</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> cat grpc.rpc</span>
+&lt;edit-config&gt;
+  &lt;target&gt;
+    &lt;running/&gt;
+  &lt;/target&gt;
+  &lt;config&gt;
+    &lt;system&gt;
+      &lt;services&gt;
+        &lt;extension-service&gt;
+          &lt;request-response&gt;
+            &lt;grpc&gt;
+              &lt;clear-text/&gt;
+              &lt;skip-authentication/&gt;
+            &lt;/grpc&gt;
+          &lt;/request-response&gt;
+        &lt;/extension-service&gt;
+      &lt;/services&gt;
+    &lt;/system&gt;
+  &lt;/config&gt;
+&lt;/edit-config&gt;
+<span class="hljs-meta">
+$</span><span class="bash"> h7t configure devices -i ./healthbot-devices/ -f grpc.rpc</span>
+</code></pre>
+<p>An alternative to provisioning devices is to pass an RPC that retrieves information e.g. h7t includes a verbose flag (-v) that can be used to see the REST requests that are generated to the healthbot installation or in the case of the <strong>configure devices</strong> sub-command see the payload that was sent on the rpc response.</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> cat get-configuration.rpc</span>
+&lt;get-configuration&gt;
+  &lt;configuration&gt;
+    &lt;system&gt;
+      &lt;login/&gt;
+    &lt;/system&gt;
+  &lt;/configuration&gt;
+&lt;/get-configuration&gt;
+<span class="hljs-meta">
+$</span><span class="bash">  h7t configure devices -i ./healthbot-devices/ -f get-configuration.rpc -v</span>
+
+Using config file: /Users/doneill/.h7t.yaml
+rpc response:
+&lt;configuration xmlns="http://xml.juniper.net/xnm/1.1/xnm" junos:changed-seconds="1573485909" junos:changed-localtime="2019-11-11 15:25:09 UTC"&gt;
+    &lt;system&gt;
+        &lt;login&gt;
+            &lt;user&gt;
+                &lt;name&gt;regress&lt;/name&gt;
+                &lt;uid&gt;2000&lt;/uid&gt;
+                &lt;class&gt;super-user&lt;/class&gt;
+                &lt;authentication&gt;
+                    &lt;encrypted-password&gt;$6$5bDOf1ds$HZK23qJdt86fXH22S64rfzEHkbH.BwxnyD0BCBZCuZOjOivmTWP0GkdgB/sfLHoMcWLbp0Uhw7KE2mgmbT4ug1&lt;/encrypted-password&gt;
+                &lt;/authentication&gt;
+            &lt;/user&gt;
+        &lt;/login&gt;
+    &lt;/system&gt;
+&lt;/configuration&gt;
+
+...
+</code></pre>
+<p>Finally, all load commands take a -e option to erase rather than create the Things defined in the configuration files. E.g. to delete the Devices provisioned in Healthbot above, you could run the following:</p>
+<pre><code class="hljs css language-console">h7t load devices -i ./healthbot-devices/ -e
+</code></pre>
+<p>This (in conjunction with Device Groups sub-command) can be used as a quick solution to blanking a Healthbot installation.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/healthbot/docs/kafka"><span class="arrow-prev">← </span><span>Kafka Integration</span></a><a class="docs-next button" href="/healthbot/docs/glossary"><span>Glossary</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#h7t">h7t</a></li><li><a href="#extract-transform-load-etl">Extract Transform Load (ETL)</a></li><li><a href="#sample-scenario">Sample Scenario</a></li><li><a href="#other-notable-commands">Other notable commands</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"></section><section class="copyright">Copyright © 2019 Damian ONeill</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+                document.addEventListener('keyup', function(e) {
+                  if (e.target !== document.body) {
+                    return;
+                  }
+                  // keyCode for '/' (slash)
+                  if (e.keyCode === 191) {
+                    const search = document.getElementById('search_input_react');
+                    search && search.focus();
+                  }
+                });
+              </script><script>
+              var search = docsearch({
+                
+                apiKey: '2e913bb4f70eeb0a94d6bd656899a3c1',
+                indexName: 'juniper_healthbot',
+                inputSelector: '#search_input_react',
+                algoliaOptions: {"facetFilters":["version:2.0.2"]}
+              });
+            </script></body></html>
